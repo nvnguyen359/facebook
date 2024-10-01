@@ -1,0 +1,49 @@
+<div >
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" >
+    <div class="flex">
+      <mat-card>
+        <mat-card-content><app-printers></app-printers></mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-content>
+          <fieldset class="flex column">
+            <legend>Cổng Lấy Thông Tin</legend>
+            <app-serialport></app-serialport>
+          </fieldset>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-content>
+          <fieldset class="flex column">
+            <legend>Thông Tin Công Ty</legend>
+            <mat-form-field>
+              <mat-label>Tên Công Ty</mat-label>
+              <input matInput formControlName="name" required>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Phone</mat-label>
+              <input matInput formControlName="phone" required>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Địa Chỉ</mat-label>
+              <input matInput formControlName="address" required>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Thông Tin Khác</mat-label>
+              <textarea matInput formControlName="infoPlus"></textarea>
+            </mat-form-field>
+            <button mat-flat-button   mat-dialog-close color="primary" [disabled]="!form.valid"
+              type="submit"><mat-icon>save</mat-icon>Lưu</button>
+          </fieldset>
+        </mat-card-content>
+      </mat-card>
+  
+    </div>
+    <div class="fixed bottom">
+      <button mat-fab color="primary" [disabled]="!form.valid" aria-label="Example icon button with a home icon"
+        type="submit">
+        <mat-icon>save</mat-icon>
+      </button>
+    </div>
+  </form>
+</div>

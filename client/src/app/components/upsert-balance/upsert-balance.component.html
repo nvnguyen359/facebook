@@ -1,0 +1,138 @@
+<form action="" [formGroup]="form" (ngSubmit)="ngSubmit()" class="form">
+    <div class="flex  full-width" style="height: 100%;">
+        <mat-card style="margin-right: 4px;">
+            <mat-card-content>
+                <div class="flex column group  padding-4 " style="width:245px">
+                    <app-display-number style="width: 100%;margin-bottom:8px"
+                        [inputObj]="inputBanCan"></app-display-number>
+
+                    <div class="flex center" style="flex-direction: row-reverse;    width: 100%;">
+                        <input list="car" name="xx" required label="Biển số xe" placeholder="Ex: 72U1-0578"
+                            formControlName="carNumber" class="height-28 ad-input">
+                        <datalist id="car">
+                            <option *ngFor="let item of carNumbers" [value]="item">{{item}}</option>
+                        </datalist>
+                        <button matTooltip="Cân lượt mới" type="button" (click)="reset()" matTooltipPosition="right"
+                            mat-mini-fab color="warn" style="margin-top: -10px;margin-left:4px" class="height-28"
+                            type="button"><mat-icon>add</mat-icon></button>
+                    </div>
+                    <input list="browsers-3" formControlName="productName" placeholder="Ex: Mì Lát" required
+                        label="Mặt hàng" class="height-28 ad-input">
+                    <datalist id="browsers-3">
+                        @for (item of carProductNames; track $index) {
+                        <option [value]="item">{{item}}</option>
+                        }
+                    </datalist>
+                    <input list="browsers-1" label="Khách Hàng" required="" id="browser-1"
+                    formControlName="customerName" placeholder="Ex: Nguyễn Văn A" class="height-28 ad-input">
+                <datalist id="browsers-1">
+                    @for (item of customerNames; track $index) {
+                    <option [value]="item['customerName']">{{item['customerName']}}</option>
+                    }
+                </datalist>
+                    <div class="flex center full-width">
+                        <input type="number" formControlName="price" label="Đơn giá(VND)" placeholder="Ex: 25000"
+                            class="height-28 ad-input">
+                        <select class="height-28 ad-input" formControlName="tare" label="Tạp chất,trừ bì"
+                            (change)="onChangeDisplayNumber($event,3)">
+                            <option *ngFor="let item of tapchats" [value]="item">{{item}}</option>
+                        </select>
+                    </div>
+                    <div class="flex units full-width">
+                        <select class="height-28 ad-input" formControlName="unit" (change)="onChangeUnit($event)">
+                            <option value="USD">1 USD</option>
+                            <option value="RIEL">1 RIEL</option>
+                        </select>
+                        <input type="number" formControlName="exchangeRate" placeholder="Ex: 24500" label="Tỉ giá (VND)"
+                            class="height-28 ad-input" style="flex-grow: 1;width:100%">
+
+                    </div>
+ 
+                    <div class="group flex row" style="margin-top: -10px;">
+                        <div class="flex row start " matRipple *ngFor="let item of radioGroups; index as i"
+                            (click)="onClickIt(i,item)">
+                            <input type="radio" name="ieGoods" (click)="onChangeRadio(item)" formControlName="ieGoods"
+                                [value]="item"><small style="margin-right: 2px;">{{item}}</small>
+                        </div>
+                        <mat-error style="margin-top: -10px;"><small><i>Chú ý chọn kiểu [Xuất Hàng, Nhập Hàng...]</i>
+                            </small></mat-error>
+                    </div>
+                    <input type="text" label="Kho" placeholder="Hoa Lư" formControlName="warehouse" autocomplete
+                        class="ad-input height-28" />
+                    <input type="text" label="Nơi cấp" placeholder="Cát Lái" formControlName="placeOfIssue"
+                        class="ad-input height-28" />
+                    <input type="text" label="Nơi nhận" placeholder="Hoa Lư" formControlName="recipient"
+                        class="ad-input height-28" />
+                    <input list="browsers-12" name="browser" formControlName="containerNumber" placeholder="Ex:SOCU ..."
+                        label="Số hiệu container" id="browser-12" class="height-28 ad-input">
+                    <datalist id="browsers-12">
+                        @for (item of containerNumbers; track $index) {
+                        <option [value]="item">{{item}}</option>
+                        }
+                    </datalist>
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Ghi chú</mat-label>
+                        <textarea matInput formControlName="note"></textarea>
+                    </mat-form-field>
+                    <div class="button-row">
+                        <button mat-flat-button type="submit" matTooltip="phím tắt: CTRL+S" matTooltipPosition="above"
+                            id="btnsave" color="primary" [disabled]="!form.valid" class="margin-r4">Lưu
+                            <mat-icon>save</mat-icon></button>
+                        <button mat-flat-button id="printer" matTooltip="phím tắt: CTRL+P" matTooltipPosition="above"
+                            type="button" color="primary" [disabled]="!form.valid" (click)="onPrinter()"
+                            class="margin-r4 ">In<mat-icon>print</mat-icon></button>
+                        <button mat-flat-button color="warn" type="button" [disabled]="!form.valid"
+                            (click)="onDelete()">Xóa<mat-icon>close</mat-icon></button>
+
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <mat-card style="flex-grow: 1;">
+            <mat-card-content>
+                <div class="flex row full-width">
+                    <div class="flex row xc full-width">
+                        <app-display-number matTooltip="Nhấp chuột xác nhận cập nhật " class="margin-r4"
+                            (mouseleave)="onMouseOutDisplay(1)" (click)="onMouseEnterDisplay('1')"
+                            (mouseenter)="onMouseEnterDisplay(1)" [inputObj]="inputWeight1"></app-display-number>
+                        <div class="margin-r4" matTooltip="Nhấp chuột xác nhận cập nhật "
+                            (mouseleave)="onMouseOutDisplay(2)" (click)="onMouseEnterDisplay('2')"
+                            (mouseenter)="onMouseEnterDisplay(2)"> <app-display-number
+                                [inputObj]="inputWeight2"></app-display-number>
+                        </div>
+                        <div class="margin-r4"> <app-display-number [inputObj]="inputWeight3"
+                                (eventOutput)="onChangeDisplayNumber($event,3)"></app-display-number>
+                        </div>
+                        <app-display-number [inputObj]="inputWeight4"></app-display-number>
+                        <div class="flex column gr">
+                            <button mat-stroked-button [disabled]="!form.valid" matTooltip="Xem Phiếu Cân"
+                                color="primary" matTooltipPosition="left" type="button"
+                                (click)="reviewBill()"><mat-icon>visibility</mat-icon>
+                            </button>
+                            <a mat-stroked-button matTooltip="Xuất File csv ngày hôm nay!" [href]="pathDownload"
+                                matTooltipPosition="left" color="accent" type="button"><img ngSrc="./assets/csv.png"
+                                    alt="" width="25" height="27" loading="eager">
+                            </a>
+                        </div>
+                    </div>
+                    <!-- <div class="flex row full-width">
+                        <ad-report-today></ad-report-today>
+                    </div> -->
+                    <div class="flex row full-width">
+                        <!-- <app-expansion-table [options]="optionsTable" [condistion]="condistionTable"
+                            (eventUpsert)="eventUpsertTable($event)"></app-expansion-table> -->
+                            <ad-table [option]="optionsTable" (eventUpsert)="eventUpsertTable($event)"></ad-table>
+                    </div>
+                   
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <input type="hidden" formControlName="id">
+    <input type="hidden" formControlName="weight1">
+    <input type="hidden" formControlName="weight2">
+    <input type="hidden" formControlName="customerId">
+    <input type="hidden" formControlName="driverId">
+    <input type="hidden" formControlName="userId">
+    <input type="hidden" formControlName="tareKg">
+</form>

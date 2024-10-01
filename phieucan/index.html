@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phiếu Cân</title>
+  <style>
+    .text-center {
+      text-align: center;
+    }
+
+    .main {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+    }
+
+    .full-width {
+      display: block;
+      width: 100%;
+    }
+
+    .nameCompany {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .c1 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th,
+    td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px dotted #dddddd85;
+    }
+
+    .co th,
+    .co tr td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #dddddd5e;
+    }
+
+    .co thead th {
+      font-weight: 800;
+    }
+
+    .ft {
+      display: block;
+      text-align: right;
+    }
+
+    footer {
+      display: flex;
+      flex-direction: row;
+      margin-top: 12px;
+    }
+
+    footer>div {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    footer>div>span {
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    footer>div>small {
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    .bangchu {
+      font-style: italic;
+      font-weight: 800;
+      margin-left: 8px;
+    }
+
+    .weight {
+      font-weight: 600;
+    }
+
+    .a4 {
+      width: 210mm;
+      height: auto;
+      padding-bottom: 100px;
+    }
+    .a5 {
+      width: 148mm;
+      height: auto;
+      padding-bottom: 100px;
+    }
+    .page-size{
+      width: PAGESIZE;
+      height: auto;
+      padding-bottom: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main page-size">
+    <div class="top">
+      <div class="full-width nameCompany">Tên Công Ty</div>
+      <div class="full-width nameCompany c1">Địa Chỉ</div>
+      <div class="full-width nameCompany c1"> fone</div>
+    </div>
+    <h2 class="text-center">PHIẾU CÂN</h2>
+    <div class="table">
+      <table>
+
+        <tr>
+          <td>Hàng Hóa</td>
+          <td colspan="3">Mì Lát</td>
+        </tr>
+        <tr>
+          <td>Khách Hàng</td>
+          <td colspan="3" class="weight">Lê Hồng Anh</td>
+
+        </tr>
+        <tr>
+          <td>Biển Số Xe</td>
+          <td>BIENSOXE</td>
+          <td>Số Chứng Từ</td>
+          <td>CHUNGTU</td>
+        </tr>
+        <tr>
+          <td>TL Hàng và Xe</td>
+          <td class="weight">HANGXE</td>
+          <td>Thời Gian Cân</td>
+          <td>TIME1</td>
+        </tr>
+        <tr>
+          <td>TL Xe</td>
+          <td class="weight">XE</td>
+          <td>Thời Gian Cân</td>
+          <td>TIME2</td>
+        </tr>
+        <tr>
+          <td>TL Hàng</td>
+          <td class="weight">HANG</td>
+          <td>Kiểu Cân</td>
+          <td>KIEUCAN</td>
+        </tr>
+        <tr>
+          <td>Tạp Chất(trừ Bì)</td>
+          <td class="weight">TRUBI</td>
+          <td>Quy Đổi</td>
+          <td class="weight">PHANTRAM%</td>
+        </tr>
+        <tr>
+          <td>TL Thanh Toán</td>
+          <td colspan="4" class="weight">HANG</td>
+        </tr>
+      </table>
+      <h2 class="text-center">HÓA ĐƠN</h2>
+      <table>
+        <thead class="co">
+          <tr>
+            <th>STT</th>
+            <th>Trọng Lượng(Kg)</th>
+            <th>Đơn Giá</th>
+            <th>Thành Tiền</th>
+          </tr>
+        </thead>
+
+        <tbody class="co">
+          <tr>
+            <td>1</td>
+            <td>HANG</td>
+            <td>DONGIA</td>
+            <td>THANHTIEN</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-left: 8px;">Bằng chữ:<span class="bangchu">BANGCHU./</span></p>
+    </div>
+    <div class="ft">
+     NGAY
+    </div>
+    <footer>
+      <div>
+        <span> Người giao hàng</span>
+        <small>(Ký và ghi rõ họ tên)</small>
+      </div>
+      <div>
+        <span> Lái xe</span>
+        <small>(Ký và ghi rõ họ tên)</small>
+      </div>
+      <div>
+        <span> Thủ Kho</span>
+        <small>(Ký và ghi rõ họ tên)</small>
+      </div>
+      <div>
+        <span> Người Cân</span>
+        <small>(Ký và ghi rõ họ tên)</small>
+      </div>
+    </footer>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,299 @@
+/* You can add global styles to this file, and also import other style files */
+
+// @import "primeng/resources/themes/lara-light-blue/theme.css";
+// @import "primeng/resources/primeng.css";
+:root {
+    --background: white
+}
+
+html,
+body {
+    height: 100%;
+    //  background: var(--background);
+}
+
+input:hover {
+    border-color: rgb(226, 55, 248);
+}
+
+$lenght: 130;
+
+@for $i from 1 through $lenght {
+    .height-#{$i} {
+        height: #{$i}px;
+    }
+}
+
+body {
+    margin: 0px;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.mat-mdc-form-field-icon-suffix,
+[dir=rtl] .mat-mdc-form-field-icon-prefix {
+    padding: 0 0 0 4px;
+    flex-basis: 48px !important;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.padding-4 {
+    padding: 4px;
+}
+
+.padding-r4 {
+    padding-right: 4px;
+}
+
+.flex {
+    display: flex;
+}
+
+.fixed.bottom {
+    position: fixed;
+    bottom: 45px;
+    right: 5px;
+    z-index: 100000;
+}
+
+.flex.start {
+    align-items: start;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-align {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}
+
+app-home,
+app-expansion-table {
+    width: 100%;
+    height: 100%;
+}
+
+a {
+    color: var(--mdc-filled-text-field-caret-color);
+    text-transform: capitalize;
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.flex.group>.mat-mdc-form-field {
+    margin-right: 4px;
+}
+
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+    overflow: hidden;
+    padding: 16px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.active {
+    background-color: var(--mat-stepper-header-selected-state-icon-background-color) !important;
+    color: whitesmoke !important;
+}
+
+.name {
+    display: flex;
+    cursor: pointer;
+    background: #3f51b5;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #3f51b5;
+    color: aliceblue;
+    transition: 0.5s all;
+    align-items: center;
+}
+
+.name:hover {
+    background: #e2e3e6;
+    color: #3f51b5;
+}
+
+.mes {
+    position: fixed;
+    z-index: 1000000;
+    bottom: 5px;
+    left: 308px;
+    opacity: 0.75;
+    display: flex;
+    color: rgb(234, 75, 255);
+}
+
+@keyframes rotating {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+.rotating {
+    -webkit-animation: rotating 2s linear infinite;
+}
+
+@keyframes example {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.refesh {
+    animation: rotating 2s linear infinite;
+    width: 24px;
+    height: 24px;
+
+    align-items: center;
+    cursor: pointer;
+    display: none;
+}
+
+.refesh.show {
+    display: flex;
+}
+
+.delete {
+    color: var(--mat-stepper-header-error-state-label-text-color);
+    cursor: pointer;
+    transition: 0.2s all;
+    transform: scale(1.1);
+}
+
+.delete:hover {
+    opacity: 0.85;
+    color: #3f51b5;
+
+}
+
+.flex.center {
+    display: flex;
+    align-items: center;
+}
+
+.flex.column {
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.flex.row {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.flex.wrap {
+    flex-wrap: wrap;
+}
+
+.iconAction {
+    cursor: pointer;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.position-abs,
+mat-form-field {
+    position: relative;
+    top: 0;
+}
+
+.position-abs mat-icon-button,
+mat-form-field mat-icon-button {
+    position: absolute;
+    z-index: 1;
+    top: -22px;
+    right: 0;
+    width: 45px;
+    height: 45px;
+}
+
+.text-right {
+    text-align: right !important;
+    padding-right: 4px;
+}
+
+.text-right>.mat-sort-header-container {
+    text-align: right !important;
+    justify-content: flex-end;
+    margin-right: -18px;
+    padding-right: 4px;
+}
+
+.text-left {
+    padding-left: 4px;
+}
+
+button {
+    transition: 0.4s all;
+}
+
+.disabled {
+    transition: 0.4s all;
+    cursor: not-allowed;
+    pointer-events: none;
+
+    /*Button disabled - CSS color class*/
+    color: #ffffff !important;
+    background-color: #d6d4d4 !important;
+}
+
+.max-height {
+    min-height: 200px;
+    max-height: 400px;
+    overflow: auto;
+}
+
+.mat-mdc-table {
+    background-color: transparent !important;
+}
+
+// .mat-drawer-content div .ng-star-inserted {
+//     width: 100%;
+// }
+
+.margin-top_-18px {
+    margin-top: -18px;
+}
+
+.margin-top_-16px {
+    margin-top: -16px;
+}
+
+.margin-r4 {
+    margin-right: 4px;
+}
+
+.shadow {
+    box-shadow: var(--mdc-elevated-card-container-elevation);
+}
+
+.example-sidenav-content.margin-top64>ad-reports {
+    width: 100%;
+}

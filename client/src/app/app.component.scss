@@ -1,0 +1,69 @@
+.mat-drawer-container{
+    height: 100%;
+}
+.example-sidenav-content.margin-top64{
+    overflow-x: hidden;
+}
+.margin-top64{
+    margin-top: 64px;
+}
+.mat-icon-button:hover{
+transform: rotate(360deg);
+}
+
+.search{
+    width: 450px;
+    margin: auto;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    padding-top: 9px;
+   position: relative;
+    > input{
+        border-radius: 10px;
+        padding-left: 35px;
+        width: 100%;
+        opacity: 1;
+        height:30px;
+        transition: all 0.2s;
+        font-size: 14px;
+    }
+    
+}
+.search:hover input{
+    width: 100%;
+    opacity: 1;
+}
+.search  mat-icon.left{
+    position: absolute;
+    color: blueviolet;
+    font-size: 30px;
+    cursor:pointer;
+    pointer-events: all;
+}
+
+.search  mat-icon.left{
+    margin-left: 5px;
+}
+.search  mat-icon.right{
+    margin-left: -25px;
+    color: red;
+    display: none;
+}
+.search  mat-icon.right.show{
+    display: block;
+    cursor: pointer;
+    z-index: 100;
+}
+.search:hover  mat-icon.left,.search:active  mat-icon.left,.search  mat-icon.left.show{
+    color: blueviolet;
+}
+.example-sidenav-content{
+    overflow-y: hidden;
+    display: flex;
+    height: -webkit-fill-available;
+}
+.example-sidenav-content >.ng-star-inserted{
+    width: 100%;
+    background-color: aqua;
+}

@@ -1,0 +1,75 @@
+
+<div class="full-width" style="overflow: hidden;">
+    <div class="flex" style="align-items: center; padding:8px">
+      <button mat-stroked-button extended color="accent" [matMenuTriggerFor]="menu">
+        Bộ Lọc
+        <mat-icon>filter_list</mat-icon>
+      </button>
+      <div style="margin-right: 16px;font-size:28px; flex-grow:1;text-align: center;">Báo Cáo {{title}}</div>
+    </div>
+  </div>
+
+  <mat-card class="mat-card-chart">
+    <div class="full-width flex" style="margin-top: -10px;">
+      <!-- <app-stacked-columns style="width: 100%;"></app-stacked-columns> -->
+      <!-- <app-chart-order  style="width: 100%;"></app-chart-order> -->
+      <!-- <app-chartjs style="width: 100%;height:300px" [options]="optionsChart"></app-chartjs> -->
+    </div>
+  </mat-card>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="onClosedMenu('homnay')">
+      <mat-icon>calendar_today</mat-icon>
+      <span>Hôm Nay</span>
+    </button>
+    <button mat-menu-item (click)="onClosedMenu('thangnay')">
+      <mat-icon>calendar_today</mat-icon>
+      <span>Tháng Nay</span>
+    </button>
+    <button mat-menu-item (click)="onClosedMenu('quinay')">
+      <mat-icon>calendar_today</mat-icon>
+      <span>Quí Nay</span>
+    </button>
+    <button mat-menu-item (click)="onClosedMenu('năm')">
+      <mat-icon>calendar_today</mat-icon>
+      <span>Năm Nay</span>
+    </button>
+    <button mat-menu-item [matMenuTriggerFor]="thang">
+      <mat-icon>date_range</mat-icon>
+      <span>Tháng</span>
+    </button>
+    <button mat-menu-item [matMenuTriggerFor]="qui">
+      <mat-icon>notifications_off</mat-icon>
+      <span>Quí</span>
+    </button>
+  
+    <button mat-menu-item (click)="picker.open()">
+      <div style="margin-right: 16px;width:150px">
+        <mat-form-field>
+          <mat-label>Chọn Khoảng Thời Gian</mat-label>
+          <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+            <input matStartDate formControlName="start" placeholder="Start date"
+              (dateChange)="onRangeDate('start',$event)">
+            <input matEndDate formControlName="end" placeholder="End date" (dateChange)="onRangeDate('end',$event)">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+  
+          <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+          <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+        </mat-form-field>
+      </div>
+    </button>
+  </mat-menu>
+  
+  <mat-menu #thang="matMenu">
+    <div class="thang">
+      <button mat-menu-item *ngFor="let thang of thangs" (click)="onClosedMenu(thang)">{{thang}}</button>
+    </div>
+  
+  </mat-menu>
+  <mat-menu #qui="matMenu">
+    <button mat-menu-item *ngFor="let thang of quis" (click)="onClosedMenu(thang)">{{thang}}</button>
+  </mat-menu>
+  <mat-menu #nam="matMenu">
+    <button mat-menu-item *ngFor="let thang of nams">{{thang}}</button>
+  </mat-menu>

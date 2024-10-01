@@ -1,0 +1,8 @@
+<mat-form-field style="width: 150px;">
+    <mat-label>{{label}}</mat-label>
+    <mat-select [required] ="required" (selectionChange)="onChange($event)" [value]="statusText" [style.color]="color">
+        <mat-option *ngFor="let status of status" [value]="status.text" [style.color]="status.color" style="width: 200px;font-size:14px">
+            {{status.text}}&nbsp; <mat-icon>{{status.icon}}</mat-icon>
+        </mat-option>
+    </mat-select>
+</mat-form-field>

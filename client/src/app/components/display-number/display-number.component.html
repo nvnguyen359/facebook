@@ -1,0 +1,12 @@
+<div class="number-x shadow" matRipple>
+    <p class="lb-x">{{inputObj.label}}</p>
+    <div class="number-serial bg-black " [innerHTML]="inputObj.value"></div>
+    <div class="number-serial  c1">888888</div>
+    <div *ngIf="inputObj.time" class="time-x" [innerHTML]="inputObj.time"></div>
+    <div *ngIf="inputObj.tare!=''" class="time-x">
+        <label for="browser" style="color: rgb(233, 227, 225);">Trừ bì(Tạp chất):</label>
+        <select name="browser" id="browser" [(ngModel)]="inputObj.tare" style="width: 50px;"  (change)="onChange($event)">
+            <option *ngFor="let item of tapchats; " [value]="item">{{item}}</option>
+        </select>
+    </div>
+</div>

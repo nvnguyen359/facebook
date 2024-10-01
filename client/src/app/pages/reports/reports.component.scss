@@ -1,0 +1,41 @@
+.thang {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 300px;
+}
+
+.card {
+    width: 150px;
+    height: 40px;
+    text-align: center;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.mat-card-title {
+    padding-top: 16px;
+}
+
+.style-content {
+    font-size: 36px;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.mat-card {
+    margin: 4px;
+}
+.mat-card-chart *{
+    width: 100%;
+    height: 100%;
+}
+
+.stacked-columns {
+    max-height: 300px;
+    overflow-y: auto;
+}

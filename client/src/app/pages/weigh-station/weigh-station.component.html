@@ -1,0 +1,176 @@
+<div class="flex full-width row we">
+    <form class="flex full-width" style="    height: fit-content;" [formGroup]="form" (ngSubmit)="ngSubmit()">
+        <fieldset style="max-width: 450px;">
+            <legend>Phiếu Cân</legend>
+            <div class="flex wrap">
+                <app-autocomplete [options]="optionCarNumber" [data]="weighStations" [default]="optionCarNumber.default"
+                    [required]="true" (keyUp)="keyUpAutoComplate($event)"
+                    (selectTed)="onSelectedAuto($event)"></app-autocomplete>
+
+                <app-autocomplete [options]="optionCustomer" [data]="weighStations" [default]="optionCustomer.default"
+                    (keyUp)="keyUpAutoComplate($event)" (selectTed)="onSelectedAuto($event)"></app-autocomplete>
+
+                <app-autocomplete [options]="optionWeighProductName" [data]="weighStations"
+                    [default]="optionWeighProductName.default" class="margin-top_-18px" [required]="true"
+                    (keyUp)="keyUpAutoComplate($event)" (selectTed)="onSelectedAuto($event)"></app-autocomplete>
+
+                <app-autocomplete [options]="optionWeighType" [data]="weighStations" class="margin-top_-18px"
+                     (keyUp)="keyUpAutoComplate($event)" (selectTed)="onSelectedAuto($event)"
+                    [default]="optionWeighType.default"></app-autocomplete>
+
+                <input type="hidden" name="" formControlName="id">
+                <input type="hidden" name="" formControlName="carNumber" required>
+                <input type="hidden" name="" formControlName="customerName" required>
+                <input type="hidden" name="" formControlName="productName" required>
+                <input type="hidden" name="" formControlName="type">
+                <input type="hidden" name="" formControlName="isActive">
+                <input type="hidden" formControlName="weight1">
+                <input type="hidden" formControlName="weight2">
+                <input type="hidden" formControlName="customerId">
+                <input type="hidden" formControlName="userId">
+                <input type="hidden" formControlName="createdAt">
+                <input type="hidden" formControlName="updatedAt">
+            </div>
+            <div class="sl-can margin-top_-18px">
+                <section class="example-section">
+                    <mat-radio-group formControlName="ieGoods">
+                        <mat-radio-button *ngFor="let item of radioGroup" [value]="item" (click)="onClickRadio(item)"
+                            (change)="onChangeRadio($event)">{{item}}</mat-radio-button>
+                    </mat-radio-group>
+                    @if(notiError){
+                        <mat-error class="err" style="margin-left: 8px;margin-top: -2px;">Chú ý chọn kiểu <span style="color: rgb(143, 12, 148);">Nhập Hàng</span> hay <span style="color: blue;">Xuất Hàng</span></mat-error>
+                    }
+                </section>
+            </div>
+            <mat-accordion>
+                <mat-expansion-panel hideToggle (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title style="color: blue;">
+                            Tính Đơn Hàng
+                        </mat-panel-title>
+                        <mat-panel-description class="icon-right">
+                            <mat-icon class="arrow-up-down">keyboard_arrow_down</mat-icon>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div class="flex row">
+                        <div class="x-price flex row ">
+                            <mat-form-field class="small margin-top_-18px position-abs">
+                                <mat-label> Trừ Bì (%)</mat-label>
+                                <mat-select formControlName="tare" [(ngModel)]="defaultY.tage"
+                                    (selectionChange)="selectionChangeTapChat($event)">
+                                    @for (x of impurities; track x) {
+                                    <mat-option [value]="x">{{x}}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="margin-top_-18px position-abs">
+                                <mat-label>Trừ Bì (Kg)</mat-label>
+                                <input matInput type="number" [(ngModel)]="defaultY.tageKg"
+                                    (keyup)="keyUptageKg($event)" formControlName="tareKg" min="0">
+                                @if (form.value.tareKg) {
+                                <button matSuffix mat-icon-button aria-label="Clear"
+                                    (click)="form.controls['tareKg'].setValue('')">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                }
+                            </mat-form-field>
+
+                            <mat-form-field class="example-form-field margin-top_-18px">
+                                <mat-label>Đơn Giá</mat-label>
+                                <input matInput type="number" [(ngModel)]="defaultY.price" formControlName="price"
+                                    min="0" (keyup)=" keypressDonGia($event)">
+                                @if (form.value.tare) {
+                                <button matSuffix mat-icon-button aria-label="Clear"
+                                    (click)="form.controls['tare'].setValue('')">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                }
+                            </mat-form-field>
+                            <mat-form-field class="small margin-top_-18px">
+                                <mat-label>Đơn Vị</mat-label>
+                                <mat-select (selectionChange)="selectionChangeUnit($event)" formControlName="unit"
+                                    [(ngModel)]="defaultY.unit" [ngModelOptions]="{standalone: true}">
+                                    <mat-option value="VND">VND</mat-option>
+                                    <mat-option value="USD">USD</mat-option>
+                                    <mat-option value="RIEL">RIEL</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex column full-width margin-top_-18px">
+                            <small style="display: block;">Tỉ giá với VND</small>
+                            <div class="flex row full-width">
+                                <mat-form-field class="margin-top_-18px" style="max-width: 150px;">
+                                    <mat-label>Đơn Vị</mat-label>
+                                    <mat-select (selectionChange)="selectionChangeUnitTi($event)"
+                                        [(ngModel)]="defaultY.unitTi" [ngModelOptions]="{standalone: true}">
+                                        <mat-option value="USD">USD</mat-option>
+                                        <mat-option value="RIEL">RIEL</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field class="margin-top_-18px" style="max-width: 230px;margin-left:4px">
+                                    <mat-label>Tỉ giá với VND</mat-label>
+                                    <input matInput type="number" min="0" formControlName="exchangeRate">
+                                    @if (objx.tareKg) {
+                                    <button matSuffix mat-icon-button aria-label="Clear" (click)="objx.tareKg=0">
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                    }
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+
+        </fieldset>
+        <fieldset>
+            <legend>Thông Số Cân</legend>
+            <div class=" margin-top_-16px">
+                <div class="flex row group center padding-4 ">
+                    <div class="number-x">
+                        <p class="lb-x">Bàn Cân</p>
+                        <div class="number-serial bg-black" [innerHTML]="weight"></div>
+                        <div class="number-serial  c1">888888</div>
+
+                    </div>
+                    <div class="number-x" style="margin-left: 4px;">
+                        <p class="lb-x">Trọng Lượng Hàng</p>
+                        <div class="number-serial bg-black " [innerHTML]="cargoVolume"></div>
+                        <div class="number-serial  c1">888888</div>
+                    </div>
+                </div>
+                <div class="flex row center group ">
+                    <app-input-custom [obj]="obj" (outputValue)="outputValue($event)"></app-input-custom>
+                    <app-input-custom [obj]="obj1" (outputValue)="outputValue($event)"
+                        style="margin-left: 4px;"></app-input-custom>
+                        <button mat-mini-fab color="accent" type="reset"  #tooltip="matTooltip" matTooltipPosition="above" (click)="resetForm()"  matTooltip="Tạo phiếu cân mới">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                </div>
+
+                <section class="sl-can margin-top_-18px" aria-disabled="true">
+                    <div class="left">
+                        <button mat-flat-button color="primary" type="button" style="border: 1px soild red;"
+                            (click)="btCanXeClick()"><span>Chốt Cân</span>
+                            </button>
+                            <button mat-flat-button color="accent" type="button" style="border: 1px soild red;"
+                            (click)="reviewBill()"><span>Xem Phiếu</span>
+                            </button>
+                    </div>
+
+                    <div class="right">
+                        <button mat-flat-button color="accent" (click)="savePrint()" [disabled]="!form.valid"
+                            type="button"><mat-icon>printer</mat-icon><span>In Phiếu</span></button>
+                        <button mat-flat-button color="primary" [disabled]="!form.valid"
+                            type="submit"><mat-icon>save</mat-icon><span>Lưu</span></button>
+                        <button mat-flat-button color="accent" type="button" [disabled]="!form.valid"
+                            (click)="onDelete()">Xóa
+                            &nbsp;<mat-icon>delete</mat-icon></button>
+                    </div>
+                </section>
+            </div>
+        </fieldset>
+    </form>
+  
+    <app-expansion-table [options]="optionsTable" (eventUpsert)="eventUpsertTable($event)"></app-expansion-table>
+</div>

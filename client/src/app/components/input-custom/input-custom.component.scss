@@ -1,0 +1,22 @@
+.example-form-field {
+    width: auto;
+}
+.mat-mdc-form-field-icon-suffix, [dir=rtl] .mat-mdc-form-field-icon-prefix {
+    padding: 0 0 0 4px;
+    flex-basis: 48px!important;
+}
+
+mat-form-field {
+    position: relative;
+    top: 0;
+}
+
+
+mat-form-field  button{
+    position: absolute;
+    z-index: 1;
+    top: -22px;
+    right: 0;
+    width: 45px;
+    height: 45px;
+}

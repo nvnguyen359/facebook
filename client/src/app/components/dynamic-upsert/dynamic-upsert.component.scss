@@ -1,0 +1,15 @@
+mat-form-field:not(.names) {
+    margin-right: 4px;
+    max-width: 160px;
+}
+
+mat-form-field.max-width50 {
+    max-width: 100px;
+}
+.names{
+    margin-right: 4px;
+    width: auto;
+}
+.close{
+    color: coral;
+}

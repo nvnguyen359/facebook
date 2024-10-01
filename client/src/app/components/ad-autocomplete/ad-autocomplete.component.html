@@ -1,0 +1,21 @@
+<div class="ad-au">
+    <ng-container *ngIf="array.length>0; else elseTemplate">
+        <input [type]="options.type" [placeholder]="options.placeholder" [formControl]="control" [matAutocomplete]="auto"
+            (keyup)="onEventInput()" [value]="value" [attr.checked]="value" [id]="id"  required>
+        <mat-autocomplete #auto="matAutocomplete" >
+            @for (item of filteredStreets | async; track item) {
+            <mat-option (onSelectionChange)="onSelectionx(item)" 
+                [value]="item">{{item[options.display]}}</mat-option>
+            }
+        </mat-autocomplete>
+        <mat-icon *ngIf="hidex" matRipple (click)="onClose()">close</mat-icon>
+        <label [for]="id">{{options.label}}</label>
+    </ng-container>
+    <ng-template #elseTemplate>
+        <input [type]="options.type" [placeholder]="options.placeholder" [formControl]="control" 
+            (keyup)="onEventInput()" [value]="value" [attr.checked]="value" [id]="id"  required>
+        <mat-icon *ngIf="hidex" matRipple (click)="onClose()">close</mat-icon>
+        <label [for]="id">{{options.label}}</label>
+    </ng-template>  
+</div>
+

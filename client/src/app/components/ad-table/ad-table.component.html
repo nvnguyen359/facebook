@@ -1,0 +1,69 @@
+<div class="flex data-null" *ngIf="!dataSource">
+    Không có dữ liệu
+</div>
+<div class="table" *ngIf="dataSource" >
+    <div class="ad-container ">
+        <table mat-table [dataSource]="dataSource" matSort [multiTemplateDataRows]="true" #table
+            (matSortChange)="announceSortChange($event)">
+            @for (column of displayedColumns; track column;) {
+            <ng-container [matColumnDef]="column">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="{{dataTotal|textAlignNumber:column}}">{{column|displayColumn}}</th>
+                <td mat-cell *matCellDef="let element">  <div [ngClass]="element[column]|textAlignNumber:column">{{element[column]|formatValue}}</div> </td>,<!--tbody-->
+                <td mat-footer-cell *matFooterCellDef  class="{{dataTotal|textAlignNumber:column}}">{{column|sumColumns:dataTotal|formatValue}} </td><!--footer-->
+            </ng-container>
+            }
+            <td mat-footer-cell *matFooterCellDef>Tổng </td>
+            <ng-container matColumnDef="expand" *ngIf="option.displayedColumnsChild?.length>0">
+                <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button aria-label="expand row"  matTooltip="Số Lượng:{{element['details']?.length}}" matTooltipPosition="left"
+                        (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+                       <div class="flex arror">
+                        <small class="bitN">{{element['details']?.length}}</small>
+                        @if (expandedElement === element) {
+                            <mat-icon>keyboard_arrow_up</mat-icon>
+                            } @else {
+                            <mat-icon>keyboard_arrow_down</mat-icon>
+                            }
+                            
+                       </div>
+                    </button>
+                </td>
+            </ng-container>
+
+            <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+            <ng-container matColumnDef="expandedDetail" >
+                <td mat-cell *matCellDef="let element" [attr.colspan]="option.displayedColumnsChild?.length" >
+                    <div [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'" class="table-child">
+                     <table >
+                        <thead>
+                            <th *ngFor="let item of option.displayedColumnsChild" [ngClass]="element[item]|textAlignNumber">{{item|displayColumn}}</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let x of element['details']">
+                                <td *ngFor="let item of option.displayedColumnsChild" [ngClass]="element[item]|textAlignNumber:item" [innerHTML]="x[item]|formatValue"></td>
+                            </tr>
+                        </tbody>
+                     </table>
+                    </div>
+                </td>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsWithExpand; sticky: true"></tr>
+            <tr mat-row *matRowDef="let element; columns: displayedColumnsWithExpand; index as i"   (click)="onRowClick(element,$event,i)"  class="ad-element-row" 
+                [class.ad-expanded-row]="expandedElement === element"
+                (click)="expandedElement = expandedElement === element ? null : element">
+            </tr>
+
+          <ng-container *ngIf="option.displayedColumnsChild; ">
+            <tr  mat-row *matRowDef="let row; columns: ['expandedDetail']" class="ad-detail-row" ></tr>
+          </ng-container>
+         
+            <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" ></tr>
+        </table>
+
+    </div>
+    <mat-paginator [pageSizeOptions]="pageSizes" showFirstLastButtons [length]="resultsLength" [pageSize]="pageSize"
+        (page)="getServerData($event)" aria-label="Select page of periodic elements"></mat-paginator>
+</div>

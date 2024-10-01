@@ -1,0 +1,162 @@
+.height-30 {
+  height: 30px;
+}
+.height-24 {
+  height: 24px;
+}
+.height-22 {
+  height: 22px;
+}
+.height-20 {
+  height: 20px;
+}
+.ad-input {
+  border-color: rgba(0, 0, 0, 0.416);
+  border-radius: 4px;
+  display: flex;
+  padding-right: 10px;
+  padding-left: 4px;
+  width: 100%;
+  border-width: 1px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+[type="radio"].ad-radio {
+  display: none;
+}
+.ad-input:focus {
+  border-color: rgba(89, 201, 253, 0.416);
+}
+.main {
+  display: flex;
+  position: relative;
+  top: 0;
+  left: 0;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 8px;
+}
+.main > label {
+  position: absolute;
+  opacity: 0.9;
+  transition: all 0.2s ease;
+  background: white;
+  padding-right: 2px;
+  border-radius: 4px;
+  color: rgba(0, 0, 0, 0.685);
+  left: 0;
+  margin-left: 2px;
+  padding-left: 4px;
+  display: flex;
+  align-items: center;
+  cursor: text;
+  animation:  acout 0.2s linear;
+}
+.ad-input::placeholder {
+  opacity: 0.85;
+}
+.main > label > span {
+  color: red;
+}
+.main > span.icon {
+  display: none;
+  cursor: pointer;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.938);
+  text-align: center;
+  color: rgb(31, 30, 30);
+  transition: all 0.2s ease;
+  right: 4px;
+  position: absolute;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  transition: all 0.3s ease;
+  animation: iconx 0.4s;
+  top: auto;
+  z-index: 12;
+}
+.main.ac > span.icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(160, 159, 159, 0.112);
+  animation: icon 0.2s;
+  font-weight: 900;
+  padding: 2px;
+}
+main.ac > span.icon1 {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(160, 159, 159, 0.112);
+  animation: icon 0.2s;
+  font-weight: 900;
+  padding: 2px;
+}
+.main > span.icon:hover {
+  color: rgb(32, 31, 31);
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  background: rgba(196, 195, 195, 0.774);
+}
+@keyframes ac {
+  from {
+    top: calc(0px);
+    transform: scale(0.9);
+  }
+  to {
+    top: -10px;
+    transform: scale(0);
+  }
+}
+@keyframes icon {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes iconx {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0);
+  }
+}
+@keyframes acout {
+  from {
+    top: calc(0px);  transform: scale(0);
+  }
+  to {
+    top: -10px;  transform: scale(0.9);
+  }
+}
+.main.ac > label {
+  top: -10px;
+  transform: scale(0.8);
+  color: var(--mdc-filled-text-field-focus-label-text-color);
+  left: 4px;
+  margin-left: 0px;
+  display: inline;
+  width: auto;
+  height: auto;
+animation:  ac 0.1s linear;
+}
+.main.ac > span {
+  transform: scale(1);
+}
+.main.ac > span.re {
+  transform: scale(1);
+  background: transparent;
+  border: 0px solid transparent;
+  height: 18px;
+  width: 18px;
+  box-shadow: none;
+}
+.main.ac > span:active {
+  background: rgba(255, 0, 0, 0.37);
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}

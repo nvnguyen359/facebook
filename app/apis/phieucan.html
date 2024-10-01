@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phiếu Cân</title>
+  <style>
+    .text-center {
+      text-align: center;
+    }
+
+    body {
+      margin: 8px;
+    }
+
+    .main {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      align-items: flex-start
+    }
+
+    .full-width {
+      display: block;
+      width: 100%;
+    }
+
+    .nameCompany {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .c1 {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .table {
+      width: 100%;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th,
+    td {
+      padding: 3px;
+      text-align: left;
+      border-bottom: 1px dotted #dddddd85;
+    }
+
+    .co th,
+    .co tr td {
+      padding: 3px;
+      text-align: left;
+      border-bottom: 1px solid #dddddd5e;
+    }
+
+    tr td:nth-child(3) {
+      padding-left: 25px
+    }
+
+    .co thead th {
+      font-weight: 800;
+    }
+
+    .left {
+      text-align: left;
+    }
+
+    .right {
+      text-align: right;
+    }
+
+    .ft {
+      display: block;
+      text-align: right;
+      width: 100%;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    footer {
+      display: flex;
+      flex-direction: row;
+      margin-top: 12px;
+      width: 100%;
+    }
+
+    footer>div {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    footer>div>span {
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+
+    footer>div>small {
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    .bangchu {
+      font-style: italic;
+      font-weight: 800;
+      margin-left: 8px;
+    }
+
+    .weight {
+      font-weight: 600;
+    }
+
+    .a4 {
+      width: 210mm;
+      height: 120mm;
+      padding-bottom: 100px;
+      overflow: auto;
+    }
+
+    .a5 {
+      width: 148mm;
+      height: 120mm;
+      padding-bottom: 100px;
+      overflow: auto;
+    }
+
+    h2 {
+      display: block;
+      width: 100%;
+      font-weight: 700;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main {{PAGESIZE}}">
+    <div class="top">
+      <div class="full-width nameCompany">{{TENCONGTY}}</div>
+      <div class="full-width nameCompany c1">{{DIACHI}}</div>
+      <div class="full-width nameCompany c1"> {{PHONE}}</div>
+    </div>
+    <h2 class="text-center">PHIẾU CÂN</h2>
+    <div class="table">
+      <table>
+
+        <tr>
+          <td>Mặt Hàng</td>
+          <td colspan="1" class="right">{{productName}}</td>
+          <td>Mã Số</td>
+          <td colspan="1">{{id}}</td>
+        </tr>
+
+        <tr>
+          <td>Khách Hàng</td>
+          <td colspan="1" class="weight right">{{customerName}}</td>
+          <td colspan="2"></td>
+        </tr>
+        <tr>
+          <td>Biển Số Xe</td>
+          <td class="right">{{carNumber}}</td>
+          <td>Số Chứng Từ</td>
+          <td> </td>
+        </tr>
+        <tr>
+          <td>TL Hàng và Xe</td>
+          <td class="weight right">{{weight1}}</td>
+          <td>Thời Gian Cân</td>
+          <td>{{createdAt1}}</td>
+        </tr>
+        <tr>
+          <td>TL Xe</td>
+          <td class="weight right">{{weight2}}</td>
+          <td>Thời Gian Cân</td>
+          <td>{{updatedAt1}}</td>
+        </tr>
+        <tr>
+          <td>TL Hàng</td>
+          <td class="weight right">{{cargoVolume}}</td>
+          <td>Kiểu Cân</td>
+          <td>{{ieGoods}}</td>
+        </tr>
+        <tr>
+          <td>Tạp Chất(Trừ Bì)</td>
+          <td class="weight right">{{tareKg}}</td>
+          <td>Quy Đổi</td>
+          <td class="weight">{{tare}}</td>
+        </tr>
+        <tr>
+          <td>TL Thanh Toán</td>
+          <td colspan="1" class="weight right">{{payVolume}}</td>
+          <td colspan="3" class="weight right"></td>
+        </tr>
+      </table>
+      <div class="{{hide}}">
+        <h2 class="text-center">HÓA ĐƠN</h2>
+        <table>
+          <thead class="co">
+            <tr>
+              <th>STT</th>
+              <th>Trọng Lượng(Kg)</th>
+              <th>Đơn Giá</th>
+              <th>Thành Tiền</th>
+            </tr>
+          </thead>
+
+          <tbody class="co">
+            <tr>
+              <td>1</td>
+              <td>{{cargoVolume}}</td>
+              <td>{{price}}</td>
+              <td>{{pay}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="margin-left: 8px;">Bằng chữ:<span class="bangchu">{{BANGCHU}}./</span></p>
+      </div>
+    </div>
+    <div class="ft">
+      Ngày tạo đơn: {{NGAY}}
+    </div>
+    <footer>
+      <div>
+        <span> Người giao hàng</span>
+        <small>(Ký và ghi rõ họ tên)</small>
+      </div>
+      <div>
+        <span> Lái xe</span>
+        <small>(Ký và ghi rõ họ tên)</small>
+      </div>
+      <div>
+        <span> Thủ Kho</span>
+        <small>(Ký và ghi rõ họ tên)</small>
+      </div>
+      <div>
+        <span> Người Cân</span>
+        <small>(Ký và ghi rõ họ tên)</small>
+      </div>
+    </footer>
+  </div>
+</body>
+
+</html>

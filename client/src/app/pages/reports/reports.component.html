@@ -1,0 +1,9 @@
+<ad-filter></ad-filter>
+<div class="full-width">
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="left"
+        (selectedTabChange)="onClickTab($event.tab.textLabel)">
+        <mat-tab [label]="item" *ngFor="let item of groupIEGoods">
+        </mat-tab>
+    </mat-tab-group>
+    <ad-table [option]="optionsTable" [condition]="condition"></ad-table>
+</div>

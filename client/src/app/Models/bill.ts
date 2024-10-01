@@ -1,0 +1,19 @@
+export interface BILL{
+    PAGESIZE:any;
+    TENCONGTY:any;
+    DIACHI:any;
+    PHONE:any;
+    TENKHACHHANG:any;
+    BIENSOXE:any;
+    CHUNGTU:any,
+    TIME1:any,
+    TIME2:any,
+    HANG:any,
+    TRUBI:any,
+    PHANTRAM:any,
+    DONGIA:any,
+    THANHTIEN:any,
+    BANGCHU:any,
+    TENHANG:any,
+    ID:any,
+}

@@ -1,0 +1,14 @@
+<div class="flex">
+    <mat-button-toggle-group style="height: 54px;" name="unit" aria-label="Đơn Vị" (change)="onChange($event)">
+        <mat-button-toggle value="vnd" >VND</mat-button-toggle>
+        <mat-button-toggle value="%">%</mat-button-toggle>
+    </mat-button-toggle-group>
+    <mat-form-field  style="width: 109px;margin-right:4px" appearance="outline">
+        <mat-label>Chiết Khấu</mat-label>
+        <input matInput type="number" [(ngModel)]="value" (keyup)="keyPress($event)" [required]="required" autocomplete="off">
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="value=''" *ngIf="value" >
+            <mat-icon>close</mat-icon>
+        </button>
+    
+    </mat-form-field>
+</div>

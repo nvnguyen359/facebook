@@ -1,0 +1,34 @@
+<mat-form-field class="full-width small" appearance="outline">
+    <mat-label>{{options.label}}</mat-label>
+    <input type="text" placeholder="{{options.placeholder}}" [required]="required" aria-label="Sản Phẩm" matInput (focus)="focus()"
+        [(ngModel)]="default" [matAutocomplete]="auto" (keyup)="onKeyup($event)" [formControl]="myControl">
+    <button matSuffix mat-icon-button aria-label="Clear" (click)="default=''" *ngIf="default">
+        <mat-icon>close</mat-icon>
+    </button>
+    <mat-autocomplete #auto="matAutocomplete">
+        <div [ngSwitch]="options.banks">
+            <div *ngSwitchCase="true">
+                <mat-option *ngFor="let item of filteredOptions| async" [value]="item['shortName']"
+                    (onSelectionChange)="onSelection(item)">
+                    <b style="color: brown;">({{item['bin']}})</b>&nbsp; {{item['shortName']}}
+                </mat-option>
+
+            </div>
+            <div *ngSwitchDefault>
+                <mat-option *ngFor="let item of filteredOptions| async" [value]="item[options.name]"
+                    (onSelectionChange)="onSelection(item)">
+                    {{item[options.name]}}
+                </mat-option>
+
+            </div>
+            <div *ngIf="options.showButton">
+                <mat-option color="accent" (click)="onNewProduct()">
+                    <div style="width: 100%;color:red">New</div>
+                </mat-option>
+            </div>
+        </div>
+
+    </mat-autocomplete>
+
+
+</mat-form-field>

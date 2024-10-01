@@ -1,0 +1,40 @@
+<div class="flex column">
+    <mat-form-field >
+        <mat-label>Chọn Cổng</mat-label>
+        <mat-select [(ngModel)]="ngModel.modelPort" (selectionChange)="selectionChange()">
+            <mat-option [value]="e['path']" *ngFor="let e of data;">
+                <div class="option">
+                    <span>{{e['path']}}</span> <small style="margin-left: 4px;">{{e['friendlyName']}}</small>
+                </div>
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Chọn tốc độ truyền</mat-label>
+        <mat-select [(ngModel)]="ngModel.modelBaud" (selectionChange)="selectionChange()" >
+            @for (e of baudRates; track e) {
+            <mat-option [value]="e" >
+                <div class="option">
+                    <span>{{e}}</span>
+                </div>
+            </mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+    <div class="flex column">
+        <mat-checkbox>Tự Động Kiểm Tra Cổng</mat-checkbox>
+    </div>
+    <div *ngIf="showProgress">
+        <mat-progress-bar mode="indeterminate" color="Warn"></mat-progress-bar>
+        <small style="display: block;">Đang kiểm tra cổng cân</small>
+
+        <ng-container *ngIf="receiveData.data==0; else elseTemplate">
+            <span style="color: red;">{{receiveData.err}}</span>
+        </ng-container>
+        <ng-template #elseTemplate>
+            <span style="color: blue;">Thông tin từ cân: {{receiveData.data}}</span>
+        </ng-template>
+
+    </div>
+    <p *ngIf="!showProgress && ngModel" style="color: blue;">Cổng: {{ngModel.modelPort}} hoạt động tốt</p>
+</div>

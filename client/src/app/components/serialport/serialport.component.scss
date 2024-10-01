@@ -1,0 +1,12 @@
+.option{
+    display: flex;
+    flex-direction: column;
+   
+    >span{
+        color: rgb(2, 18, 245);
+    }>small{
+        font-weight: 200;
+        font-style: italic;
+        color: rgb(61, 60, 59);
+    }
+}

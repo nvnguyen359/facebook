@@ -1,0 +1,39 @@
+<div class="flex">
+    <div class="flex" style="flex-grow: 1;">
+        <div style="margin-right: 8px;">
+            <input type="checkbox" name="" checked id="vehicle1" title="so">
+            <label for="vehicle1"> Số Lượng</label><br>
+        </div>
+        <div style="margin-right: 8px;">
+            <input type="checkbox" name="" id="vehicle1" title="so">
+            <label for="vehicle1"> Doanh Thu</label><br>
+        </div>
+        <div style="margin-right: 8px;">
+            <input type="checkbox" name="" id="vehicle1" title="so">
+            <label for="vehicle1"> Lợi Nhuận</label><br>
+        </div>
+        <div style="margin-right: 8px;">
+            Chọn kiểu
+            <select name="cars" (change)="onChangeType($event)">
+                <option [value]="item" *ngFor="let item of typeArray">{{item}}</option>
+            </select>
+        </div>
+        <div style="margin-right: 8px;" *ngIf="Axes.length>0">
+            0X
+            <select name="cars">
+                <option [value]="item" *ngFor="let item of Axes">{{item}}</option>
+            </select>
+        </div>
+        <div style="margin-right: 8px;" *ngIf="Axes.length>0">
+            0Y
+            <select name="cars">
+                <option [value]="item" *ngFor="let item of Axes">{{item}}</option>
+            </select>
+        </div>
+    </div>
+
+    <mat-icon>fullscreen</mat-icon>
+    <mat-icon>fullscreen_exit</mat-icon>
+</div>
+
+<canvas [id]="id"></canvas>

@@ -1,0 +1,139 @@
+<div class="flex data-null" *ngIf="dataSource.data.length==0">
+    Không có dữ liệu
+</div>
+<div class="xx1" *ngIf="dataSource.data.length>0">
+    <div class="example-container max-height">
+        <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort>
+            <ng-container matColumnDef="{{column}}" *ngFor="let column of displayedColumns">
+                <th mat-header-cell *matHeaderCellDef [class]="thTextAligh(column)" mat-sort-header
+                    matTooltip="{{columnOrders(column,true)}}" matTooltipPosition="left"
+                    style="font-size: 12px;background:rgba(179, 177, 177, 0.514)">
+                    <div [ngSwitch]="column">
+                        <div *ngSwitchCase="'no'" class="flex" style="align-items: center;">
+                            {{columnOrders(column)}}
+                            <mat-checkbox *ngIf="url!='inventory'" (change)="$event ? toggleAllRows() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()">
+                            </mat-checkbox>
+
+                            <mat-icon color="warn" *ngIf="selection.selected.length>0" class="iconAction"
+                                (click)="onbulkDelete()">delete</mat-icon>
+                        </div>
+
+                        <div *ngSwitchDefault>{{columnOrders(column)}}</div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <div class="flex center">
+                        <div [ngSwitch]="column">
+                            <div *ngSwitchCase="'no'">
+                                {{element[column]}}
+                                <mat-checkbox *ngIf="url!='inventory'" (click)="$event.stopPropagation()"
+                                    (change)="$event ? selection.toggle(element) : null"
+                                    [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
+                                </mat-checkbox>
+                            </div>
+                            <div *ngSwitchCase="'createdAt'">
+                                <mat-chip-listbox aria-label="Fish selection">
+                                    <mat-chip-option color="accent">
+                                        <div class=" full-width flex center chip">
+                                            <mat-icon *ngIf="column=='createdAt'">date_range</mat-icon>
+                                            &nbsp; <div [innerHTML]="formatValue(element[column],column)"></div>
+                                        </div>
+                                    </mat-chip-option>
+                                </mat-chip-listbox>
+                            </div>
+
+                            <div *ngSwitchDefault>
+                                <div class="full-width flex center" style="width: 100%;">
+                                    <div [innerHTML]="formatValue(element[column],column)"></div>
+                                </div>
+                                <button *ngIf="column=='email'" mat-icon-button color="accent"
+                                    matTooltip="Tạo Đơn Hàng Mới"
+                                    (click)="onAddNewOrder(element)"><mat-icon>add</mat-icon></button>
+                            </div>
+                        </div>
+
+                    </div>
+                </td>
+                
+            </ng-container>
+
+            <ng-container *ngIf="showImport() ">
+                <ng-container matColumnDef="expand">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header aria-label="row actions">&nbsp;</th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button aria-label="expand row"
+                            (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+                            <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+                            <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+
+                        </button>
+                    </td>
+                </ng-container>
+
+                <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+                <ng-container matColumnDef="expandedDetail">
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+                        <div class="example-element-detail"
+                            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                            <table class="table-details">
+                                <thead>
+                                    <td [class]="thTextAligh(column)" *ngFor="let column of columnsChild">
+                                        {{columnOrders(column)}}
+                                    </td>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of element.details">
+                                        <td *ngFor="let column of columnsChild">
+                                            <div [innerHTML]="formatValue(item[column],column)"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </ng-container>
+
+
+                <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;" class="example-element-row"
+                    [class.example-expanded-row]="expandedElement === element"
+                    (click)="expandedElement = expandedElement === element ? null : element">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+                <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+            </ng-container>
+
+            <ng-container *ngIf="!showImport()">
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;index as i"
+                    (click)="onRowClick(row,$event,i)"></tr>
+
+            </ng-container>
+           
+        </table>
+
+    </div>
+    <div class="flex center" style="justify-content: flex-end;">
+        <div *ngIf="options.isShowBt">
+            <button *ngIf="url!='inventory'" class="{{ngDisabled()}}" mat-flat-button color="primary"
+                (click)="onUpdates()" style="margin-right: 8px;">Cập Nhật
+                &nbsp;<mat-icon>update</mat-icon></button>
+            <button *ngIf="url!='inventory'" class="{{ngDisabled()}}" mat-flat-button color="accent"
+                (click)="onbulkDelete()">Xóa
+                &nbsp;<mat-icon>delete</mat-icon></button>
+        </div>
+        <div><a  [routerLink]="['/settings']" rnkActive="router-link-activeouterLi" style="cursor: pointer;">Xem chi tiết báo cáo</a>
+            </div>
+        <div>
+            <mat-paginator [length]="resultsLength" [pageSize]="pageSize" (page)="getServerData($event)"
+                style="width: 100%;" [pageSizeOptions]="[pageSize,10, 25, 100,1000,5000]" showFirstLastButtons="true">
+            </mat-paginator>
+        </div>
+    </div>
+    <!-- <div class="fixed bottom">
+        <button mat-fab color="warn" aria-label="Example icon button with a home icon" (click)="onCreate()">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div> -->
+</div>

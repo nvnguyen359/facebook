@@ -1,0 +1,46 @@
+.example-spacer {
+    flex: 1 1 auto;
+    align-items: center;
+  }
+  .menu {
+    display: inline-flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.menu-item {
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    user-select: none;
+    min-width: 64px;
+    line-height: 36px;
+    padding-left: 8px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex: 1;
+    text-decoration: none;
+}
+
+.menu-item:hover {
+    background-color: rgb(245, 242, 242);
+}
+
+.menu-item:active {
+   // background-color: rgb(170, 170, 170);
+}
+.active{
+    background-color: var(--mat-stepper-header-selected-state-icon-background-color);
+   color: whitesmoke;
+}
+#info{
+    color: royalblue;
+    font-weight: 700;
+   
+}
+#getversion{
+    color: royalblue;
+    font-size: medium;
+}

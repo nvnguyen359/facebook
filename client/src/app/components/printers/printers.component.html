@@ -1,0 +1,23 @@
+<fieldset style="max-width: 250px;">
+  <legend>Máy In</legend>
+  <div class="flex print">
+    <mat-form-field>
+      <mat-label>Chọn Máy In</mat-label>
+      <mat-select [(ngModel)]="printDefault" (selectionChange)="onSelected($event,'print')">
+        <mat-option [value]="item" *ngFor="let item of array;">{{item.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Chọn Khổ Giấy</mat-label>
+      <mat-select [(ngModel)]="pageDefault" (selectionChange)="onSelected($event,'page')">
+        <mat-option [value]="item" *ngFor="let item of pageSizes;">{{item['key']}}({{item['value']}})</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="flex column">
+    <mat-checkbox (change)="onChange($event)" [(ngModel)]="isThermal">{{choise}}</mat-checkbox>
+    <mat-checkbox class="example-margin" [(ngModel)]="isPreview" (change)="checkPreview($event)">Xem
+      Trươc</mat-checkbox>
+    <mat-checkbox class="example-margin" [(ngModel)]="isPay" (change)="checkQrPay($event)">Qr Thanh Toán</mat-checkbox>
+  </div>
+</fieldset>

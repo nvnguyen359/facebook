@@ -1,0 +1,10 @@
+<mat-form-field class="example-form-field">
+    <mat-label>{{obj.lable}}</mat-label>
+    <input matInput [type]="obj.type" [(ngModel)]="obj.value" pattern="[0-9]{0,5}" inputmode="numeric" (keyup)="keyup()" (focus)="focus()"
+        (change)="keyup()" [required]="obj.require">
+    @if (obj.value) {
+    <button matSuffix mat-icon-button aria-label="Clear" (click)="onClickClear()">
+        <mat-icon>close</mat-icon>
+    </button>
+    }
+</mat-form-field>

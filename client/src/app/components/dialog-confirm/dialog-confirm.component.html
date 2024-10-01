@@ -1,0 +1,8 @@
+
+<div mat-dialog-content style="color: brown;">
+    <div [innerHTML]="data.header"></div>
+</div>
+<div mat-dialog-actions style="display: flex;justify-content: flex-end;">
+    <button mat-button [mat-dialog-close]="false" >No</button>
+    <button mat-stroked-button [mat-dialog-close]="true" cdkFocusInitial color="warn" data->Ok</button>
+</div> 
