@@ -146,7 +146,7 @@ module.exports = app;
 const { CrawData } = require("./features/Adplaywright");
 const craw = new CrawData("https://www.facebook.com/", false);
 (async () => {
-  await craw.setup();
-  await craw.loginFaceBook('nvnguyen2504@gmail.com','anhduongthanhthuy');
-  await craw.getGroups()
+  // await craw.setup();
+  // await craw.loginFaceBook('nvnguyen2504@gmail.com','anhduongthanhthuy');
+  // await craw.getGroups()
 })();

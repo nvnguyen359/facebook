@@ -1,5 +1,6 @@
 const e = require("express");
 const { delay } = require("./../shares/lib");
+const knex = require("knex");
 const createUsers = async (knex) => {
   try {
     const tbl = "user";
@@ -41,16 +42,16 @@ const createWeighStation = async (knex) => {
       table.string("ieGoods");
       table.string("tare");
       table.double("tareKg");
-      table.integer('actualVolume');
+      table.integer("actualVolume");
       table.integer("price");
       table.double("pay");
       table.integer("exchangeRate");
       table.string("unit");
-      table.double('payment');// thanh toán sau quy đổi
+      table.double("payment"); // thanh toán sau quy đổi
       table.string("containerNumber");
       table.string("customerName");
       table.string("note");
-      table.string("warehouse");// kho 
+      table.string("warehouse"); // kho
       table.string("placeOfIssue");
       table.string("recipient");
       table.string("driver");
@@ -142,15 +143,24 @@ const initTable = async (knex) => {
   return new Promise(async (res, rej) => {
     let tables = [];
     // await createUsersTable(knex);
-    let tb = await createUsers(knex);
+    // var tb =
+    // await createUsers(knex);
+    // tables.push(tb);
+    // tb = await createWeighStation(knex);
+    // tables.push(tb);
+    // tb = await createCustomer(knex);
+    // tables.push(tb);
+    // tb = await createCompany(knex);
+    // tables.push(tb);
+    let tb = await setting(knex);
     tables.push(tb);
-    tb = await createWeighStation(knex);
+    tb = await socials(knex);
     tables.push(tb);
-    tb = await createCustomer(knex);
+    tb = await groupFb(knex);
     tables.push(tb);
-    tb = await createCompany(knex);
+    tb = await postGroup(knex);
     tables.push(tb);
-    tb = await setting(knex);
+    tb = await postDaily(knex);
     tables.push(tb);
     res(tables);
     // await afterTabletramCan(knex);
@@ -199,6 +209,100 @@ const afterTabletramCan = async (knex) => {
     await knex.schema.table("weighStation", async (table1) => {
       table1.string(column);
     });
+  }
+};
+
+const socials = async (knex) => {
+  try {
+    const tbl = "social";
+    const hasTable = await knex.schema.hasTable(tbl);
+    if (hasTable) {
+      //  console.log(tbl, "already exist!");
+      return tbl;
+    }
+    await knex.schema.createTable(tbl, (table) => {
+      table.string("userName", 250).notNullable();
+      table.string("password", 250).notNullable();
+      table.string("idfb", 250);
+      table.string("cookies", 250);
+      table.string("proxy", 250);
+      table.string("status");
+      table.string("active");
+      baseData(table);
+    });
+    // console.log(tbl, "successfully created");
+    return tbl;
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+const groupFb = async (knex) => {
+  try {
+    const tbl = "groupFb";
+    const hasTable = await knex.schema.hasTable(tbl);
+    if (hasTable) {
+      //  console.log(tbl, "already exist!");
+      return tbl;
+    }
+    await knex.schema.createTable(tbl, (table) => {
+      table.integer("groupId", 250).notNullable();
+      table.string("name", 250);
+      table.string("member", 250);
+      table.string("status");
+      table.string("active");
+      baseData(table);
+    });
+    // console.log(tbl, "successfully created");
+    return tbl;
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const postGroup = async (knex) => {
+  try {
+    const tbl = "postGroup";
+    const hasTable = await knex.schema.hasTable(tbl);
+    if (hasTable) {
+      //  console.log(tbl, "already exist!");
+      return tbl;
+    }
+    await knex.schema.createTable(tbl, (table) => {
+      table.string("title", 250).notNullable();
+      table.string("images", 250);
+      table.string("content");
+      table.string("shortenLink");
+      table.string("comments");
+      table.string("active");
+      baseData(table);
+    });
+    // console.log(tbl, "successfully created");
+    return tbl;
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+const postDaily = async (knex) => {
+  try {
+    const tbl = "postDaily";
+    const hasTable = await knex.schema.hasTable(tbl);
+    if (hasTable) {
+      //  console.log(tbl, "already exist!");
+      return tbl;
+    }
+    await knex.schema.createTable(tbl, (table) => {
+      table.integer("postId").notNullable();
+      table.integer("groupId");
+      table.string("numberOfArticles");
+      table.string("shortenLink");
+      table.integer("maxNumber");
+      table.string("status");
+      baseData(table);
+    });
+    // console.log(tbl, "successfully created");
+    return tbl;
+  } catch (error) {
+    console.error(error.message);
   }
 };
 module.exports = { initTable };

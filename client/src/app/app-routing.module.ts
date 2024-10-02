@@ -15,16 +15,42 @@ const routes: Routes = [
   {
     path: BaseApiUrl.BaoCao,
     loadChildren: () =>
-      import('./pages/reports/reports.module').then(
-        (m) => m.ReportsModule
-      ),
+      import('./pages/reports/reports.module').then((m) => m.ReportsModule),
   },
   {
     path: BaseApiUrl.CaiDat,
     loadChildren: () =>
       import('./pages/setting/setting.module').then((m) => m.SettingModule),
   },
-  { path: BaseApiUrl.TrangChu, loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
+  {
+    path: BaseApiUrl.TrangChu,
+    loadChildren: () =>
+      import('./pages/home/home.module').then((m) => m.HomeModule),
+  },
+  {
+    path: BaseApiUrl.Social,
+    loadChildren: () =>
+      import('./pages/social/social.module').then((m) => m.SocialModule),
+  },
+  {
+    path: BaseApiUrl.PostGroup,
+    loadChildren: () =>
+      import('./pages/post-gruop/post-gruop.module').then(
+        (m) => m.PostGruopModule
+      ),
+  },
+  {
+    path: BaseApiUrl.postDaily,
+    loadChildren: () =>
+      import('./pages/post-daily/post-daily.module').then(
+        (m) => m.PostDailyModule
+      ),
+  },
+  {
+    path: BaseApiUrl.groupFb,
+    loadChildren: () =>
+      import('./pages/group-fb/group-fb.module').then((m) => m.GroupFbModule),
+  },
 ];
 
 @NgModule({

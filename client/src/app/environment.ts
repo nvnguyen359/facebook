@@ -1,8 +1,8 @@
 // environment.ts
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:3276/api',
-  url:'http://localhost:3276/',
+  baseUrl: 'http://localhost:3376/api',
+  url:'http://localhost:3376/',
   firebaseConfig: {
     apiKey: 'AIzaSyAPAv7YizucOEKK3_pA1cVRvvkIrxvUhfs',
     authDomain: 'mindful-syntax-106206.firebaseapp.com',

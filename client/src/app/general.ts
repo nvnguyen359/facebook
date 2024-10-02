@@ -37,6 +37,10 @@ export enum BaseApiUrl {
   User = 'user',
   BaoCao = 'baocao',
   Printers = 'printers',
+  Social = 'social',
+  groupFb = 'groupFb',
+  postDaily = 'postDaily',
+  PostGroup='postGroup'
 }
 export enum fieldData {
   importPrice = 'importPrice',
@@ -51,13 +55,18 @@ export function links() {
       icon: 'home',
     },
     {
+      text: 'Tài Khoản',
+      link: `/${BaseApiUrl.Social}`,
+      icon: 'shopping_basket',
+    },
+    {
       text: 'Báo Cáo',
       link: `/${BaseApiUrl.BaoCao}`,
       icon: 'shopping_basket',
     },
     {
-      text: 'Khách Hàng',
-      link: `/${BaseApiUrl.KhachHang}`,
+      text: 'Nhóm',
+      link: `/${BaseApiUrl.groupFb}`,
       icon: 'spa',
     },
     {
@@ -84,8 +93,8 @@ const adcolumnsToDisplay = [
   { key: 'quantity', value: 'SL' },
   { key: 'intoMney', value: 'Thành Tiền' },
   { key: 'pay', value: 'Thanh Tiền' },
-  {key:'payment',value:'Thanh Toán'},
-  {'key':'numberOfContainers',value:'Số Hiệu Cont.'},
+  { key: 'payment', value: 'Thanh Toán' },
+  { key: 'numberOfContainers', value: 'Số Hiệu Cont.' },
   { key: 'createdAt', value: 'Ngày' },
   { key: 'updatedAt', value: 'Ngày' },
   { key: 'customerName', value: 'Khách Hàng' },

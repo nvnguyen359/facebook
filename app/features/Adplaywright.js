@@ -69,16 +69,13 @@ class CrawData {
     await page.mouse.click(10, 100);
     await page.locator('a[href="/groups/joins/?nav_source=tab"]').click();
     await this._page.waitForTimeout(5000);
-    await autoScroll(page, 5);
-    // var groups = await page.locator(
-    //   '[aria-label="Danh sách nhóm"] a[role="link"][href*="https://www.facebook.com/groups"]'
-    // );
-    let groups = await page.locator('a[aria-label="Xem nhóm"]');
-    console.log(groups.length, groups[0]);
+    await autoScroll(page, 400);
+    // let groups = await page.locator('a[aria-label="Xem nhóm"]');
+    // console.log(groups.length, groups[0]);
     const dt = await page.$$eval('a[aria-label="Xem nhóm"]', (nodes) =>
       nodes.map((n) => n.getAttribute('href'))
     );
-    console.log(dt[0]);
+    console.log('count:',dt.length,dt[0]);
   }
   async addCookies() {
     await this._browser.addCookies([cookieObject1, cookieObject2]);

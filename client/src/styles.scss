@@ -297,3 +297,14 @@ button {
 .example-sidenav-content.margin-top64>ad-reports {
     width: 100%;
 }
+
+app-social {
+    width: 100%;
+    position: relative;
+}
+.button-container-footer{
+    position: absolute;
+    z-index: 12;
+    bottom: 16px;
+    right: 16px;
+}

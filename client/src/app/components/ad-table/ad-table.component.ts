@@ -42,7 +42,14 @@ import { SumColumnsPipe } from 'src/app/pipes/sum-columns.pipe';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DataService } from 'src/app/services/data.service';
-
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { SelectionModel } from '@angular/cdk/collections';
+/**
+ *
+ *
+ * @export
+ * @class AdTableComponent
+ */
 @Component({
   selector: 'ad-table',
   animations: [
@@ -70,6 +77,7 @@ import { DataService } from 'src/app/services/data.service';
     SumColumnsPipe,
     MatBadgeModule,
     MatTooltipModule,
+    MatCheckboxModule,
   ],
 
   templateUrl: './ad-table.component.html',
@@ -87,6 +95,7 @@ export class AdTableComponent {
   expandedElement: any | null | undefined;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort | undefined;
+  selection = new SelectionModel<any>(true, []);
   // @ViewChild(MatTable, { static: false }) table!: MatTable<any>;
   @ViewChild('table', { read: ViewContainerRef }) table!: ViewContainerRef;
   private _liveAnnouncer: LiveAnnouncer | undefined;
@@ -95,20 +104,21 @@ export class AdTableComponent {
   resultsLength = 100;
   pageSize = 10;
   dataTotal: any;
+  displayCheckbox = false;
   @Output() eventDelete = new EventEmitter();
   @Output() eventUpsert = new EventEmitter();
   count = 0;
   constructor(
     private servive: ApiService,
     private changeDetectorRefs: ChangeDetectorRef,
-    private dataService: DataService,
-  ) {
-  }
+    private dataService: DataService
+  ) {}
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     // this.getData();
-
+    if (this.option.displayCheckbox)
+      this.displayCheckbox = this.option.displayCheckbox;
     this.getData();
     this.dataService.currentMessage.subscribe((e: any) => {
       if (e.status == Status.Add) {
@@ -126,6 +136,10 @@ export class AdTableComponent {
     //   search: { ieGoods: changes['condition']['currentValue'] },
     // };
   }
+  onUpdates(){
+
+  }
+  onbulkDelete(){}
   async displayDetails() {
     await delay(300);
     const array = document.querySelectorAll('tr.ad-detail-row');
@@ -192,6 +206,32 @@ export class AdTableComponent {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     }
+  }
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  toggleAllRows() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      return;
+    }
+
+    this.selection.select(...this.dataSource.data);
+  }
+
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?: any): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
+      row.position + 1
+    }`;
   }
   /** Announce the change in sort state for assistive technology. */
   announceSortChange(sortState: Sort) {
