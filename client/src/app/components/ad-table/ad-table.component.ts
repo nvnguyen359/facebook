@@ -6,7 +6,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { CommonModule } from '@angular/common';
+import { CommonModule, SlicePipe } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
@@ -44,6 +44,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DataService } from 'src/app/services/data.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { SlidePipe } from 'src/app/pipes/slide.pipe';
 /**
  *
  *
@@ -78,6 +80,8 @@ import { SelectionModel } from '@angular/cdk/collections';
     MatBadgeModule,
     MatTooltipModule,
     MatCheckboxModule,
+    MatSlideToggleModule,
+    SlidePipe,
   ],
 
   templateUrl: './ad-table.component.html',
@@ -88,6 +92,7 @@ export class AdTableComponent {
   @Input() data: any[] = [];
   @Input() option: any;
   @Input() condition: any;
+  @Input() searchColumns: any = [];
   dataSource: any = new MatTableDataSource<any>([]);
   displayedColumns: string[] = [];
   displayedColumnsWithExpand: string[] = [];
@@ -103,17 +108,23 @@ export class AdTableComponent {
   //*==============
   resultsLength = 100;
   pageSize = 10;
+  pageIndex = 0;
   dataTotal: any;
   displayCheckbox = false;
+  isShowMes = true;
   @Output() eventDelete = new EventEmitter();
   @Output() eventUpsert = new EventEmitter();
   count = 0;
+  isUpsert: boolean = true;
+
   constructor(
     private servive: ApiService,
     private changeDetectorRefs: ChangeDetectorRef,
     private dataService: DataService
   ) {}
   ngOnInit(): void {
+    this.condition = {};
+    this.condition.limit = this.pageSize;
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     // this.getData();
@@ -121,11 +132,28 @@ export class AdTableComponent {
       this.displayCheckbox = this.option.displayCheckbox;
     this.getData();
     this.dataService.currentMessage.subscribe((e: any) => {
-      if (e.status == Status.Add) {
+      if (
+        e.status == Status.Add ||
+        e.status == Status.Refesh ||
+        e.status == Status.Upsert
+      ) {
+        let search: any = {};
         delete e.status;
-        this.condition = {};
-        this.condition = { search: e };
+        if (e.value && this.searchColumns.length > 0) {
+          for (let i = 0; i < this.searchColumns.length; i++) {
+            search[this.searchColumns[i]] = e.value;
+          }
+        } else {
+          search = e;
+        }
+        if (Object.keys(e).length > 0) this.condition = { search };
         this.getData();
+      }
+      if(  e.status == Status.Search){
+        
+      }
+      if (e.status != Status.Refesh) {
+        this.scrollTop();
       }
     });
   }
@@ -136,10 +164,28 @@ export class AdTableComponent {
     //   search: { ieGoods: changes['condition']['currentValue'] },
     // };
   }
-  onUpdates(){
-
+  adfilter(data: any, searchTerm: any) {
+    return data.filter((freight: any) => {
+      let search = searchTerm.removeAccents();
+      var values = Object.values(freight).filter((x) => x != null);
+      var flag = false;
+      values.forEach((val: any) => {
+        if (`${val}`.removeAccents().indexOf(search) > -1) {
+          flag = true;
+          return;
+        }
+      });
+      if (flag) return freight;
+    });
   }
-  onbulkDelete(){}
+  onUpdates() {
+    const data = Array.from(this.selection.selected).map((x) => {
+      delete x.no;
+      return x;
+    });
+    this.eventUpsert.emit(data);
+  }
+  onbulkDelete() {}
   async displayDetails() {
     await delay(300);
     const array = document.querySelectorAll('tr.ad-detail-row');
@@ -156,7 +202,7 @@ export class AdTableComponent {
     this.dataTotal = array;
     let ar1 = !this.option.displayedColumnsChild
       ? array.map((x, index) => {
-          x['no'] = index + 1;
+          x['no'] = index + 1 + this.pageIndex * this.pageSize;
           return x;
         })
       : array;
@@ -190,22 +236,36 @@ export class AdTableComponent {
     this.changeDetectorRefs.detectChanges();
   }
   getData() {
-    const condition = this.condition ? this.condition : this.option?.condition;
+    let condition = this.condition ? this.condition : this.option?.condition;
     this.servive.get(this.option.url, condition).then(async (e: any) => {
+      this.isShowMes = e.count == 0;
       if (e.count > 0) {
         this.resultsLength = e.count;
         await this.initData(e.items);
       }
     });
   }
+  scrollTop() {
+    setTimeout(() => {
+      var element = document.getElementById('scrollTop');
+      if (element) {
+        element.scrollTo({ top: element.scrollHeight, behavior: 'instant' });
+      }
+    }, 200);
+  }
   changeTable(data: any) {}
-  getServerData(event: any) {}
+  getServerData(event: any) {
+    this.pageIndex = event.pageIndex;
+    this.condition.offset = event.pageIndex;
+    this.getData();
+  }
   //========================================================================
   ngAfterViewInit() {
     if (this.dataSource) {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     }
+    this.changeDetectorRefs.detectChanges();
   }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -241,15 +301,27 @@ export class AdTableComponent {
       this._liveAnnouncer?.announce('Sorting cleared');
     }
   }
+  eventChecked() {
+    const selected = this.selection.selected;
+    this.isUpsert = selected.length == 0;
+  }
   onRowClick(item: any, event: any, index: any) {
-    this.eventUpsert.emit(item);
-    const rows = document.querySelectorAll('.mat-mdc-row');
-    rows.forEach((e: any) => e.classList.remove('active'));
-    (event.target as HTMLElement)
-      .closest('.mat-mdc-row')
-      ?.classList.add('active');
+    // this.selection.setSelection(item);
+    // //this.eventUpsert.emit([item]);
+    // const rows = document.querySelectorAll('.mat-mdc-row');
+    // rows.forEach((e: any) => e.classList.remove('active'));
+    // (event.target as HTMLElement)
+    //   .closest('.mat-mdc-row')
+    //   ?.classList.add('active');
+    this.isUpsert = false;
+    this.eventUpsert.emit([item]);
     event.preventDefault();
     //event.stopPropagation();
+  }
+  onChangeSlide(event: any, element: any) {
+    delete element.no;
+    element['active'] = event.checked;
+    this.servive.update(this.option.url, element);
   }
 }
 

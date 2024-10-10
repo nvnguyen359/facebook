@@ -160,7 +160,9 @@ const initTable = async (knex) => {
     tables.push(tb);
     tb = await postGroup(knex);
     tables.push(tb);
-    tb = await postDaily(knex);
+    tb = await reportArticle(knex);
+    tables.push(tb);
+    tb = await article(knex);
     tables.push(tb);
     res(tables);
     // await afterTabletramCan(knex);
@@ -223,11 +225,36 @@ const socials = async (knex) => {
     await knex.schema.createTable(tbl, (table) => {
       table.string("userName", 250).notNullable();
       table.string("password", 250).notNullable();
-      table.string("idfb", 250);
+      table.string("uid", 250);
       table.string("cookies", 250);
       table.string("proxy", 250);
       table.string("status");
       table.string("active");
+      baseData(table);
+    });
+    // console.log(tbl, "successfully created");
+    return tbl;
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+const article = async (knex) => {
+  try {
+    const tbl = "article";
+    const hasTable = await knex.schema.hasTable(tbl);
+    if (hasTable) {
+      //  console.log(tbl, "already exist!");
+      return tbl;
+    }
+    await knex.schema.createTable(tbl, (table) => {
+      table.string("title", 250).notNullable();
+      table.string("content", 250).notNullable();
+      table.string("media", 250);
+      table.string("linkProducts", 250);
+      table.string("comments");
+      table.string("type");//media status
+      table.integer('randomMedia')
+      table.boolean("active");
       baseData(table);
     });
     // console.log(tbl, "successfully created");
@@ -246,10 +273,12 @@ const groupFb = async (knex) => {
     }
     await knex.schema.createTable(tbl, (table) => {
       table.integer("groupId", 250).notNullable();
+      table.string("uid").notNullable();
       table.string("name", 250);
       table.string("member", 250);
-      table.string("status");
+      table.boolean("status");// 
       table.string("active");
+      table.string("socialId");
       baseData(table);
     });
     // console.log(tbl, "successfully created");
@@ -282,21 +311,23 @@ const postGroup = async (knex) => {
     console.error(error.message);
   }
 };
-const postDaily = async (knex) => {
+const reportArticle = async (knex) => {
   try {
-    const tbl = "postDaily";
+    const tbl = "reportArticle";
     const hasTable = await knex.schema.hasTable(tbl);
     if (hasTable) {
       //  console.log(tbl, "already exist!");
       return tbl;
     }
     await knex.schema.createTable(tbl, (table) => {
-      table.integer("postId").notNullable();
+      table.string("nameGroup");
+      table.string('category').notNullable();
+      table.string("title");
+      table.integer("articleId").notNullable();
       table.integer("groupId");
-      table.string("numberOfArticles");
-      table.string("shortenLink");
-      table.integer("maxNumber");
-      table.string("status");
+      table.string("uid");
+      table.integer("count");
+      table.string("status");// thất bại, xét duyệt, hoàn thành
       baseData(table);
     });
     // console.log(tbl, "successfully created");

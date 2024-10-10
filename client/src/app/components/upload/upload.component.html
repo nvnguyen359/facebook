@@ -1,0 +1,8 @@
+<button matSuffix mat-icon-button type="button" matTooltip="Chọn folder chứa file ảnh, video" (click)="files.click()">
+    <mat-icon>{{option.icon}}</mat-icon>
+</button>
+<div style='display:none'>
+    <!-- <img [src]="localUrl" *ngIf="localUrl" class="imgPlaceholder">
+     -->
+    <input type="file" name="file" #files id="files" multiple="true" accept="video/*,image/*" (change)="onChangeFile($event)">
+</div>

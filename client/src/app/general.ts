@@ -40,7 +40,9 @@ export enum BaseApiUrl {
   Social = 'social',
   groupFb = 'groupFb',
   postDaily = 'postDaily',
-  PostGroup='postGroup'
+  PostGroup = 'postGroup',
+  Article = 'article',
+  ReportArticle = 'reportArticle',
 }
 export enum fieldData {
   importPrice = 'importPrice',
@@ -60,8 +62,8 @@ export function links() {
       icon: 'shopping_basket',
     },
     {
-      text: 'Báo Cáo',
-      link: `/${BaseApiUrl.BaoCao}`,
+      text: 'Bài Viết',
+      link: `/${BaseApiUrl.Article}`,
       icon: 'shopping_basket',
     },
     {
@@ -133,139 +135,186 @@ const adcolumnsToDisplay = [
   { key: 'customertName', value: 'Khách Hàng' },
   { key: 'id', value: 'ID' },
   { key: 'actualVolume', value: 'KL Thực', tooltip: 'Khối lượng hàng thực tế' },
+  { key: 'userName', value: 'Tên Đăng Nhập' },
+  { key: 'password', value: 'Mật Khẩu' },
+  { key: 'uid', value: 'UID' },
+  { key: 'cookies', value: 'Cookies' },
+  { key: 'proxy', value: 'Proxy' },
+  { key: 'active', value: 'Action' },
 ];
 export function fields() {
   const data = [
     {
+      field: 'socialId',
+      type: 'select',
+      placeholder: 'Ex: chọn tài khoản',
+      title: 'Chọn Tài Khoản',
+    },
+    //social
+    {
+      field: 'userName',
+      type: 'text',
+      placeholder: 'Ex: hung123,nvnguyen2504@gmail.com',
+      title: 'Email hoặc Tên đăng nhập',
+      require: true,
+    },
+    {
+      field: 'password',
+      type: 'text',
+      placeholder: 'Ex: *******',
+      title: 'Mật khẩu',
+      require: true,
+    },
+    {
+      field: 'id',
+      type: 'hidden',
+    },
+    {
+      field: 'uid',
+      type: 'text',
+      placeholder: 'Ex: 14xxxxxx',
+      title: 'UID',
+    },
+    {
+      field: 'cookies',
+      type: 'area',
+      title: 'Cookies',
+      placeholder: 'Cookies',
+    },
+    {
+      field: 'proxy',
+      type: 'text',
+      placeholder: 'Ex: *******',
+      title: 'Proxy',
+    },
+    //gruopFb
+    {
+      field: 'groupId',
+      type: 'integer',
+      placeholder: 'Ex: *******',
+      title: 'Id Group',
+    },
+    {
       field: 'name',
       type: 'text',
-      text: 'Tên',
-      require: true,
+      placeholder: 'Ex: abc',
+      title: 'Tên Nhóm',
     },
     {
-      field: 'quantity',
-      type: 'number',
-      text: 'Số Lượng',
-      step: 1,
-      require: true,
-    },
-    {
-      field: 'phone',
-      type: 'phone',
-      text: 'Điện Thoại',
-      require: true,
-    },
-    {
-      field: 'address',
+      field: 'member',
       type: 'text',
-      text: 'Địa Chỉ',
-      require: false,
-    },
-    {
-      field: 'email',
-      type: 'email',
-      text: 'Email',
-      require: false,
-    },
-    {
-      field: 'createdAt',
-      type: 'date',
-      text: 'Ngày Tạo',
-    },
-    {
-      field: 'updatedAt',
-      type: 'date',
-      text: 'Ngày',
-    },
-    {
-      field: 'price',
-      type: 'number',
-      text: 'Đơn Giá',
-      step: 500,
-      require: true,
-    },
-    {
-      field: 'importPrice',
-      type: 'number',
-      text: 'Giá Nhập',
-      step: 500,
-      require: true,
-    },
-    {
-      field: 'pay',
-      type: 'number',
-      text: 'Thanh Toán',
-    },
-    {
-      field: 'unit',
-      type: 'text',
-      text: 'Đơn Vị',
-    },
-    {
-      field: 'money',
-      type: 'number',
-      text: 'Số Tiền',
-      require: true,
-    },
-    {
-      field: 'note',
-      type: 'text',
-      text: 'Ghi Chú',
-      step: 500,
-      require: true,
-    },
-    {
-      field: 'kh_ncc',
-      type: 'text',
-      text: 'Khách Hàng-NCC',
+      placeholder: 'Ex: *******',
+      title: 'Thành Viên',
     },
     {
       field: 'status',
       type: 'text',
-      text: 'Trạng Thái',
+      placeholder: 'Ex: ',
+      title: 'Trạng Thái',
+    },
+    
+    //article
+    {
+      field: 'title',
+      type: 'text',
+      placeholder: 'Tiêu đề bài viết',
+      title: 'Tiêu Đề',
     },
     {
-      field: 'loanDate',
-      type: 'date',
-      text: 'Ngày Tạo',
+      field: 'content',
+      type: 'area',
+      placeholder: 'Viết nội dung ở đây',
+      title: 'Nội dung',
     },
     {
-      field: 'payDate',
-      type: 'date',
-      text: 'Ngày T.Toán',
+      field: 'media',
+      type: 'media',
+      placeholder: 'Ex: D:\\ABC\\Sxyzp',
+      title: 'Đường dẫn folder chứa ảnh/video',
     },
     {
-      field: 'weight1',
+      field: 'shopee',
+      type: 'text',
+      placeholder: 'link sàn shopee sản phẩm',
+      title: 'Link Shopee',
+    },
+    {
+      field: 'lazada',
+      type: 'text',
+      placeholder: 'link sàn lazada sản phẩm',
+      title: 'Link lazada',
+    },
+    {
+      field: 'Tiktok',
+      type: 'text',
+      placeholder: 'link sàn Tiktok sản phẩm',
+      title: 'Link Tiktok',
+    },
+    {
+      field: 'linkProducts',
+      type: 'text',
+      placeholder: 'https...,https...',
+      title: 'Link sản phẩm',
+    },
+    {
+      field: 'comments',
+      type: 'text',
+      placeholder: 'Ex: ha ha, ok bạn',
+      title: 'Bình luận',
+    },
+    {
+      field: 'type',
+      type: 'select',
+      placeholder: 'Ex: media|status',
+      title: 'Kiểu',
+    },
+   
+    {
+      field: 'randomMedia',
       type: 'number',
-      text: 'KL Lần 1',
+      placeholder: 'Ex: 1,2,...',
+      title: 'Ngẫu nhiên',
+    },
+    //reportArticle
+    {
+      field: 'nameGroup',
+      type: 'text',
+      placeholder: 'Ex: Chợ tốt.',
+      title: 'Tên Group',
+      require:true
     },
     {
-      field: groupItem.IsumImport,
-      text: 'Tổng Nhập',
+      field: 'articleId',
+      type: 'number',
+      placeholder: 'Ex: ...',
+      title: 'Id Bài Viết',
+      require:true
     },
     {
-      field: groupItem.ISumSales,
-      text: 'Tổng Doanh Thu',
+      field: 'count',
+      type: 'number',
+      placeholder: 'Ex: số bài đăng',
+      title: 'Id Group',
+      require:false
+    },
+    //================
+    {
+      field: 'createdAt',
+      type: 'date',
+      placeholder: 'Ex: 20/02/2024',
+      title: 'Ngày Tạo',
     },
     {
-      field: groupItem.ISumQuantity,
-      text: 'Tổng Số Lượng',
+      field: 'updatedAt',
+      type: 'date',
+      placeholder: 'Ex: 20/02/2024',
+      title: 'Cập Nhật',
     },
     {
-      field: groupItem.ISumExpense,
-      text: 'Tổng Chi',
-    },
-    {
-      field: groupItem.sumSale,
-      text: 'Tổng Bán',
-    },
-    {
-      field: groupItem.sumImport,
-      text: 'Tiền Nhập',
-    },
-    {
-      field: 'kh_ncc',
-      text: 'K.Hàng-NCC',
+      field: 'active',
+      type: 'boolean',
+      placeholder: 'Ex: *******',
+      title: 'Hoạt Động',
     },
   ];
   return data;

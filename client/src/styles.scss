@@ -256,7 +256,7 @@ button {
 
 .disabled {
     transition: 0.4s all;
-    cursor: not-allowed;
+    cursor: no-drop;
     pointer-events: none;
 
     /*Button disabled - CSS color class*/
@@ -297,8 +297,11 @@ button {
 .example-sidenav-content.margin-top64>ad-reports {
     width: 100%;
 }
-
-app-social {
+[color="success"]{
+    background-color: blueviolet;
+    color: white;
+}
+app-social,ad-upsert,app-article ,app-group-fb{
     width: 100%;
     position: relative;
 }

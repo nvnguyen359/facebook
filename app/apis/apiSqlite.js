@@ -180,14 +180,14 @@ const create = (element, app, crud) => {
 const findAll = (element, app, crud) => {
   app.get(`/api/${element}`, async (req, res, next) => {
     const q = req.query;
-    console.log('findAll',q)
+    console.log("findAll", q);
     const column = q.columns ? q.columns.split(",") : [];
     const limit = parseInt(q.pageSize) || parseInt(q.limit) || 100;
-    const offset = parseInt(q.page) || 0;
+    const offset = parseInt(q.page) || q.offset || 0;
     const startDay = q.startDay;
     const endDay = q.endDay;
-    const search =q.search? JSON.parse(q.search):undefined;
-    
+    const search = q.search ? JSON.parse(q.search) : undefined;
+
     const obj = {
       query: q.query,
       column,

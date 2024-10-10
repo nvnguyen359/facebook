@@ -1,0 +1,105 @@
+<h2 [innerHTML]="data.title" *ngIf="data.title"></h2>
+
+<div class="">
+    <form [formGroup]="form" class="form" (ngSubmit)="onSubmit()">
+        <div class="list-form">
+            <div formArrayName="formArray" class="margin-r4 formArray"
+                *ngFor="let item of form.controls.formArray?.value; index as i;trackBy: trackByFn">
+                <ng-container [formGroupName]="i" class="full-width">
+                    <div class="group">
+                        @for (x of data.fields; track $index) {
+                        <div [ngSwitch]="x['type']">
+                            <div *ngSwitchCase="'id'">
+                                <input type="hidden" name="id" [formControlName]="x['field']">
+                            </div>
+                            <div *ngSwitchCase="'area'">
+                                <mat-form-field *ngIf="x['show']" class="full-width">
+                                    <mat-label>{{x['title']}}</mat-label>
+                                    <textarea matInput [formControlName]="x['field']" [required]="x['required']"
+                                        [placeholder]="x['placeholder']" rows="4" cols="30"></textarea>
+                                    <button matSuffix mat-icon-button aria-label="Clear"
+                                        *ngIf="form.value['formArray'][i][x['field']]" (click)="onEmpty(i,x['field'])">
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                </mat-form-field>
+                            </div>
+                            <div *ngSwitchCase="'media'">
+                                <mat-form-field *ngIf="x['show']" class="full-width">
+                                    <mat-label>{{x['title']}}</mat-label>
+                                    <textarea matInput [formControlName]="x['field']"
+                                        [placeholder]="x['placeholder']"></textarea>
+                                    <button matSuffix mat-icon-button aria-label="Clear"
+                                        *ngIf="form.value['formArray'][i][x['field']]" (click)="onEmpty(i,x['field'])">
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                    <!-- <button matSuffix mat-icon-button type="button" (click)="openFolder()" matTooltip="Chọn folder chứa file ảnh, video" >
+                                    <mat-icon>folder</mat-icon>
+                                </button> -->
+                                    <!-- <ad-upload [formControlName]="x['field']" (output)="onOutput($event)"></ad-upload> -->
+                                </mat-form-field>
+                            </div>
+                            <div *ngSwitchCase="'boolean'">
+                                <section *ngIf="x['show']">
+                                    <mat-checkbox class="example-margin"
+                                        [formControlName]="x['field']">{{x['title']}}</mat-checkbox>
+                                </section>
+                            </div>
+                            <div *ngSwitchCase="'select'">
+                                <section *ngIf="x['show']">
+                                    <mat-form-field *ngIf="data.datalist" class="{{data.datalistField.disable}}">
+                                        <mat-label>{{x['title']}}</mat-label>
+                                        <select matNativeControl [required]="x['required']" (change)="onChangeSelect($event,i)"
+                                            [formControlName]="x['field']">
+                                            <option [value]="item['id']" *ngFor="let item of data.datalist">
+                                                {{item[data.datalistField.view]}}
+                                            </option>
+                                        </select>
+                                    </mat-form-field>
+                                </section>
+                            </div>
+                            <div *ngSwitchCase="'date'">
+                                <mat-form-field *ngIf="x['show']">
+                                    <mat-label>{{x['title']}}</mat-label>
+                                    <input matInput [matDatepicker]="picker" [formControlName]="x['field']">
+                                    <mat-hint>MM/DD/YYYY</mat-hint>
+                                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+
+                            <div *ngSwitchDefault>
+                                <mat-form-field class="full-width " *ngIf="x['show']">
+                                    <mat-label>{{x['title']}}</mat-label>
+                                    <input matInput [placeholder]="x['placeholder']" [type]="x['type']"
+                                        [required]="x['required']" [formControlName]="x['field']">
+                                    <button matSuffix mat-icon-button aria-label="Clear"
+                                        *ngIf="form.value['formArray'][i][x['field']]" (click)="onEmpty(i,x['field'])">
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        }
+                        <div class="flex row btn-delete">
+                            <button *ngIf="numberRow>1" mat-mini-fab (click)="onDelete(i)" color="warn" class="delete"
+                                type="button">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+
+                        </div>
+                    </div>
+                    <!-- {{item|json}} -->
+
+                </ng-container>
+
+            </div>
+        </div>
+
+        <div class="flex row group-button" style="justify-content: end;margin-top:8px">
+            <button mat-flat-button type="submit" mat-dialog-close color="success" [disabled]="!form.valid"
+                style="margin-right: 8px;">Lưu <mat-icon>save</mat-icon></button>
+            <button mat-flat-button type="button" color="primary" (click)="onAdd(1)">Thêm Mới
+                <mat-icon>add</mat-icon></button>
+        </div>
+    </form>
+</div>

@@ -5,15 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script type="module" src="../client/src/assets/custom-input.js"></script>
+    <!-- <script src="../client/src/assets/custom-input.js"></script> -->
     <link rel="stylesheet" href="../client/src/assets/custom-input.css">
 </head>
 
 <body>
     input
+    <div class="main"><input type="text" data="[1,2,3]" label="label" placeholder="" required=""
+            class="ad-input height-30" id="id-20461" name="id-20461"><label
+            for="id-20461">label<span>*</span></label><span matripple="" class="icon"
+            style="width: 24px; height: 24px;">✕</span></div>
     <div class="root">
-      <input type="text" data=[1,2,3] label="label" placeholder="placeholder" required class="ad-input height-30" />
-      <input type="text" data=[1,2,3] label="label" placeholder="placeholder" required class="ad-input height-30" value="ok" />
+        <input type="text" data=[1,2,3] label="label" placeholder="placeholder" required class="ad-input height-30" />
+        <input type="text" data=[1,2,3] label="label" placeholder="placeholder" required class="ad-input height-30"
+            value="ok" />
         <input type="text" [data]="data" class="ad-input height-20" />
         <select name="cars" id="cars" class="height-30 ad-input">
             <option value="volvo" (click)="click('ok')">Volvo</option>
@@ -25,8 +30,9 @@
 
 </body>
 <script>
-    function click(e){
+    function click(e) {
         console.log(e)
     }
 </script>
+
 </html>

@@ -51,6 +51,8 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/group-fb/group-fb.module').then((m) => m.GroupFbModule),
   },
+  { path: BaseApiUrl.Article, loadChildren: () => import('./pages/article/article.module').then(m => m.ArticleModule) },
+  { path: BaseApiUrl.ReportArticle, loadChildren: () => import('./pages/report-article/report-article.module').then(m => m.ReportArticleModule) },
 ];
 
 @NgModule({

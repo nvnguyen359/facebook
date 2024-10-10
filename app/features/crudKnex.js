@@ -49,18 +49,33 @@ class CRUDKNEX {
       return { error };
     }
   }
-  async update(data) {
+  async onUpdate(data) {
     const id = data?.id;
     data.updatedAt = new Date().toISOString();
-    try {
-      const result = await this.knex(this.table)
-        .where({ id })
-        .update(data)
-        .returning("*");
-      return result;
-    } catch (error) {
-      return { error };
-    }
+    const result = await this.knex(this.table)
+      .where({ id })
+      .update(data)
+      .returning("*");
+    return result;
+  }
+  async update(data) {
+    return new Promise(async (res, rej) => {
+      console.log(data);
+      let result = [];
+      try {
+        if (!Array.isArray(data)) {
+          await this.onUpdate(data);
+        } else {
+          Array.from(data).forEach(async (item) => {
+            await lib.delay(200);
+            result.push(await this.onUpdate(item));
+          });
+        }
+        res(result);
+      } catch (error) {
+        return { error };
+      }
+    });
   }
   async upsert(data) {
     let id = null;
@@ -93,7 +108,7 @@ class CRUDKNEX {
     let sqlClone;
     // console.log(obj)
     const {
-      limit = 100,
+      limit = 1000,
       offset = 0,
       startDay,
       endDay,
@@ -112,7 +127,6 @@ class CRUDKNEX {
       }
       result = await knex.raw(query);
     } else {
-
       result = this.knex(this.table).select();
       if (column) {
         result = result.column(column);
@@ -122,10 +136,12 @@ class CRUDKNEX {
         const entries = Object.entries(search);
         for (let i = 0; i < entries.length; i++) {
           const x = entries[i];
-          if (i == 0) {
-            result = result.where(x[0], "LIKE", `%${x[1]}`);
-          } else {
-            result = result.orWhere(x[0], "LIKE", `%${x[1]}`);
+          if (x[0] != "value") {
+            if (i == 0) {
+              result = result.where(x[0], "LIKE", `%${x[1]}`);
+            } else {
+              result = result.orWhere(x[0], "LIKE", `%${x[1]}`);
+            }
           }
         }
       }
@@ -138,8 +154,17 @@ class CRUDKNEX {
         result = result.where(dateAt, "<=", to);
       }
       sqlClone = result.clone();
-      result = result.limit(limit).offset(offset).orderBy(orderBy, "desc");
-      console.log('count:'.green,(await sqlClone.count('id as CNT'))[0]['CNT'] ,'query:'.red,result.toString().cyan);
+
+      result = result
+        .offset(offset)
+        .limit(limit, { skipBinding: true })
+        .orderBy(orderBy, "desc");
+      console.log(
+        "count:".green,
+        (await sqlClone.count("id as CNT"))[0]["CNT"],
+        "query:".red,
+        result.toString().cyan
+      );
     }
 
     return new Promise(async (res, rej) => {

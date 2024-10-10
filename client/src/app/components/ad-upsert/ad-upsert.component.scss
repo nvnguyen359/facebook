@@ -1,0 +1,68 @@
+mat-form-field {
+    margin-bottom: -14px;
+}
+form{
+    width: 100%;
+    max-height: 500px;
+    display: flex;
+    position: relative;
+}
+.group-button{
+    
+    z-index: 10;
+    bottom: 0;
+    right: 10px;
+}
+.form {
+    max-height: 700px;
+   
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+.list-form{
+    display: flex;
+    flex-direction: column;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.formArray {
+    max-height: 650px;
+    // overflow-y: auto;
+  //  width: 100%;
+}
+
+.form area {
+    width: 100%;
+}
+
+.group {
+    width: 400px;
+    max-width: 400px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border: 1px solid rgb(236, 236, 236);
+    padding: 10px;
+    margin: 2px;
+    height: 100%;
+position: relative;
+}
+.btn-delete{
+    position: absolute;
+    right: 8px;
+    z-index: 1;
+    bottom: 8px;
+    opacity: 0.4;
+}
+.btn-delete:hover{
+    opacity: 1;
+}
+.group:hover {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+}
+
+[color=success] {
+    background-color: blueviolet;
+    color: white;
+}

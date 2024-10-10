@@ -1,38 +1,35 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AdUpsertComponent } from 'src/app/components/ad-upsert/ad-upsert.component';
-import { DynamicUpsertComponent } from 'src/app/Components/dynamic-upsert/dynamic-upsert.component';
 import { fields } from 'src/app/general';
 import { Fields } from 'src/app/Models/field';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
-  selector: 'app-social',
-  templateUrl: './social.component.html',
-  styleUrl: './social.component.scss',
+  selector: 'app-article',
+  templateUrl: './article.component.html',
+  styleUrl: './article.component.scss',
 })
-export class SocialComponent {
-  url='social'
-  optionsTable: any = {
+export class ArticleComponent {
+  url='article';
+  option: any = {
     url: this.url,
     displayedColumns: [
-      'userName',
-      'password',
-      'uid',
-      'cookies',
-      'proxy',
+      'title',
+      'content',
+      'linkProducts',
+      'comments',
+      'media',
+      'type',
+      'randomMedia',
       'active',
     ],
     isShowBt: true,
     displayCheckbox: true,
   };
   fieldFilter: any;
-  constructor(
-    private service: ApiService,
-    private changeDetectorRefs: ChangeDetectorRef,
-    private dialog: MatDialog
-  ) {
+  constructor(private dialog: MatDialog) {
     this.fieldFilter = (fields() as Fields[])
       .filter((x: any) => this.columns.includes(x.field))
       .map((x: Fields) => {
@@ -44,38 +41,34 @@ export class SocialComponent {
         return x;
       });
   }
-  columns = [
-    'userName',
-    'password',
-    'uid',
-    'cookies',
-    'proxy',
-    'updatedAt',
-    'createdAt',
-  ];
+  columns = [...this.option.displayedColumns, 'updatedAt', 'createdAt'];
   options: any = {
     displayedColumns: ['no', ...this.columns],
   };
   obj = {
     id: [0],
-    userName: [, Validators.required],
-    password: [, Validators.required],
-    cookies: [''],
-    proxy: [''],
-    uid: [''],
-
+    title: ['', Validators.required],
+    content: ['', Validators.required],
+    linkProducts: [''],
+    comments: [''],
+    type: [''],
+    media: [''],
+    randomMedia: [0],
+    active: [true],
     createdAt: new Date(),
     updatedAt: new Date(),
   };
   initObj(item: any = null) {
     this.obj = {
       id: [item.id | 0],
-      userName: [item?.userName, Validators.required],
-      password: [item?.password, Validators.required],
-      cookies: [item?.cookies],
-      proxy: [item?.proxy],
-      uid: [item.uid],
-
+      title: [item?.title, Validators.required],
+      content: [item?.content, Validators.required],
+      linkProducts: [item?.linkProducts],
+      comments: [item?.comments],
+      type: [item.type],
+      media: [item.media],
+      randomMedia: [item.randomMedia],
+      active: [item.active],
       createdAt: item.createdAt,
       updatedAt: new Date(),
     };
@@ -92,7 +85,7 @@ export class SocialComponent {
         fields: this.fieldFilter,
         obj: this.obj,
         title: 'Thêm tài khoản facebook',
-        url:this.url,
+        url: this.url,
       },
     });
   }

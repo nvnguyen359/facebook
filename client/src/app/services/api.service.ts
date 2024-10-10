@@ -112,7 +112,7 @@ export class ApiService {
         }
       });
     }
-    // console.log(pas);
+    console.log(pas);
     const pathUrl = `${this.baseServer}/${url}?${pas}`;
     return new Promise((res, rej) => {
       this.http

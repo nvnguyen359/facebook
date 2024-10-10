@@ -198,7 +198,13 @@ const downloadExcel = async (app) => {
     // return res.end();
   });
 };
-
+const upload = async (app) => {
+  console.log('upload')
+  app.post(`/api/upload`, async (req, res, next) => {
+    console.log(req,'data');
+    res.send({data:'ok'})
+  });
+};
 const allApisPrinter = async (app) => {
   getListPrinter(app);
   thermalPrinter(app);
@@ -209,5 +215,6 @@ const allApisPrinter = async (app) => {
   await printBill(app);
   await downloadExcel(app);
   await printerHtml(app);
+  await upload(app);
 };
-module.exports = { getListPrinter, thermalPrinter, allApisPrinter, getComs };
+module.exports = { getListPrinter, thermalPrinter, allApisPrinter, getComs,upload };
