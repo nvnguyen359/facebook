@@ -5,7 +5,7 @@ const swaggerDocument = require("./swagger.json");
 require("dotenv").config({ path: "./../.env" });
 const { getListPrinter, allApisPrinter } = require("./apis/apiInfo");
 const CommunicationPort = require("./seiralPort");
-var bodyParser = require('body-parser');
+var bodyParser = require("body-parser");
 //require('./features/upsertGgsheet')
 const fs = require("fs");
 var bodyParser = require("body-parser");
@@ -87,7 +87,6 @@ const allowedOrigins = [
 // app.use(express.json({limit: '50mb'})); // for parsing application/json
 // app.use(express.urlencoded({ extended: true ,limit: '50mb'})); // for parsing application/x-www-form-urlencoded
 
-
 app.use(cors({ origin: "*" }));
 app.use(function (req, res, next) {
   // Website you wish to allow to connect
@@ -114,10 +113,16 @@ app.use(function (req, res, next) {
 
 //============================================================
 app.use(bodyParser.text());
-app.use(bodyParser.json({ type: 'application/json', limit: '50mb' }));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
-    app.use(bodyParser()); // lấy thông tin từ form HTML
-    app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ type: "application/json", limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: true,
+    parameterLimit: 50000,
+  })
+);
+//app.use(bodyParser()); // lấy thông tin từ form HTML
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   next();
@@ -146,9 +151,20 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 module.exports = app;
 
 const { CrawData } = require("./features/Adplaywright");
-const craw = new CrawData("https://www.facebook.com/", false);
+const craw = new CrawData(false);
 (async () => {
-  // await craw.setup();
-  // await craw.loginFaceBook('nvnguyen2504@gmail.com','anhduongthanhthuy');
-  // await craw.getGroups()
+  await craw.setup();
+  const social = {
+    userName: "nvnguyen2504@gmail.com",
+    password: "anhduongthanhthuy",
+    id: 27,
+    avatar: "",
+    uid: "",
+    cookies: "",
+    proxy: "",
+    status: "",
+    active: "",
+  };
+  await craw.loginDesktop(social);
+  await craw.getGroupsDesktop();
 })();

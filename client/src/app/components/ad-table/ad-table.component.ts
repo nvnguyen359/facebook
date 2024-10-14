@@ -116,7 +116,7 @@ export class AdTableComponent {
   @Output() eventUpsert = new EventEmitter();
   count = 0;
   isUpsert: boolean = true;
-
+  oldData: any[] = [];
   constructor(
     private servive: ApiService,
     private changeDetectorRefs: ChangeDetectorRef,
@@ -149,14 +149,22 @@ export class AdTableComponent {
         if (Object.keys(e).length > 0) this.condition = { search };
         this.getData();
       }
-      if(  e.status == Status.Search){
-        
+      if (e.status == Status.Search) {
+        if (e?.value) {
+          this.dataSource.data = this.adfilter(this.oldData, e.value);
+        } else {
+          delete e.status;
+          if (Object.keys(e).length > 0) this.condition = { search: e };
+          this.getData();
+        }
       }
+
       if (e.status != Status.Refesh) {
         this.scrollTop();
       }
     });
   }
+  addFilterData(e: any) {}
   ngOnChanges(changes: SimpleChanges): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
@@ -185,7 +193,12 @@ export class AdTableComponent {
     });
     this.eventUpsert.emit(data);
   }
-  onbulkDelete() {}
+  async onbulkDelete() {
+    const url = this.option.url;
+    const ids = Array.from(this.selection.selected).map((x) => x['id']);
+    await this.servive.bulkDelete(url, ids);
+    this.dataService.sendMessage({ status: Status.Refesh });
+  }
   async displayDetails() {
     await delay(300);
     const array = document.querySelectorAll('tr.ad-detail-row');
@@ -242,6 +255,7 @@ export class AdTableComponent {
       if (e.count > 0) {
         this.resultsLength = e.count;
         await this.initData(e.items);
+        this.oldData = e.items;
       }
     });
   }
@@ -257,6 +271,7 @@ export class AdTableComponent {
   getServerData(event: any) {
     this.pageIndex = event.pageIndex;
     this.condition.offset = event.pageIndex;
+    this.condition.limit = event.pageSize;
     this.getData();
   }
   //========================================================================
@@ -316,7 +331,7 @@ export class AdTableComponent {
     this.isUpsert = false;
     this.eventUpsert.emit([item]);
     event.preventDefault();
-    //event.stopPropagation();
+ // event.stopPropagation();
   }
   onChangeSlide(event: any, element: any) {
     delete element.no;

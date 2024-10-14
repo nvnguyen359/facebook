@@ -2,6 +2,8 @@
 
 // @import "primeng/resources/themes/lara-light-blue/theme.css";
 // @import "primeng/resources/primeng.css";
+@import "~ng-zorro-antd/ng-zorro-antd.min.css";
+
 :root {
     --background: white
 }
@@ -310,4 +312,8 @@ app-social,ad-upsert,app-article ,app-group-fb{
     z-index: 12;
     bottom: 16px;
     right: 16px;
+}
+mat-timepicker-content{
+    background-color: white!important;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }

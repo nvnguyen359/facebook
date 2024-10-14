@@ -42,6 +42,7 @@ import { MatSelectModule } from '@angular/material/select';
   selector: 'ad-upsert',
   standalone: true,
   imports: [
+    MatSelectModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     NgFor,
@@ -60,7 +61,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatCheckboxModule,
     MatTooltipModule,
     UploadComponent,
-    MatSelectModule,
+    
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   templateUrl: './ad-upsert.component.html',

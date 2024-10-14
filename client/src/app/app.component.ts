@@ -64,6 +64,7 @@ export class AppComponent {
       if (item) {
         item.style.width = '100%';
         item.style.opacity = '1';
+        item.style.color = 'black';
         item.focus();
       }
     }

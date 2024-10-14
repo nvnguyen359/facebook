@@ -22,8 +22,9 @@ import {
   CommonModule,
   HashLocationStrategy,
   LocationStrategy,
+  registerLocaleData,
 } from '@angular/common';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withJsonpSupport } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
@@ -49,8 +50,23 @@ import { IpcService } from './services/ipc.service';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { BaseApiUrl } from './general';
 import { environment } from './environment';
-
+import { NzButtonModule } from 'ng-zorro-antd/button';
 const config: SocketIoConfig = { url: environment.url, options: {} };
+import en from '@angular/common/locales/en';
+
+import { NZ_ICONS } from 'ng-zorro-antd/icon';
+import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
+import { IconDefinition } from '@ant-design/icons-angular';
+import * as AllIcons from '@ant-design/icons-angular/icons';
+
+
+registerLocaleData(en);
+
+const antDesignIcons = AllIcons as {
+  [key: string]: IconDefinition;
+};
+const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -105,7 +121,7 @@ const config: SocketIoConfig = { url: environment.url, options: {} };
     MatChipsModule,
     MatInputModule,
     MatTooltipModule,
-    SocketIoModule.forRoot(config),
+    SocketIoModule.forRoot(config),NzButtonModule
   ],
   providers: [
     MatDatepickerModule,
@@ -118,6 +134,9 @@ const config: SocketIoConfig = { url: environment.url, options: {} };
       provide: LocationStrategy,
       useClass: HashLocationStrategy,
     },
+    provideHttpClient(withJsonpSupport()),
+    { provide: NZ_I18N, useValue: en_US },
+    { provide: NZ_ICONS, useValue: icons }
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],

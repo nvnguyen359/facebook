@@ -13,17 +13,18 @@ import { DataService } from 'src/app/services/data.service';
   styleUrl: './group-fb.component.scss',
 })
 export class GroupFbComponent {
+  task: any;
   url = 'groupFb';
   option: any = {
     url: this.url,
-    displayedColumns: ['name', 'socialId', 'groupId', 'member', 'active'],
+    displayedColumns: ['name', 'groupId', 'member', 'active'],
     isShowBt: true,
-    displayCheckbox: false,
+    displayCheckbox: true,
   };
   fieldFilter: any;
   socials: any[] = [];
   defaultSocial!: any;
-  searchColumns:any[]=['name']
+  searchColumns: any[] = ['name'];
   constructor(
     private dialog: MatDialog,
     private service: ApiService,
@@ -32,15 +33,19 @@ export class GroupFbComponent {
     this.fieldFilter = (fields() as Fields[])
       .filter((x: any) => this.columns.includes(x.field))
       .map((x: Fields) => {
-        if (x.field == 'updatedAt' || x.field == 'createdAt') {
-          x.show = false;
-        } else {
-          x.show = true;
-        }
+        x.show = x.field == 'updatedAt' || x.field == 'createdAt';
         return x;
       });
   }
-  columns = [...this.option.displayedColumns, 'updatedAt', 'createdAt'];
+  columns = [
+    'name',
+    'socialId',
+    'groupId',
+    'member',
+    'active',
+    'updatedAt',
+    'createdAt',
+  ];
   options: any = {
     displayedColumns: ['no', ...this.columns],
   };
@@ -95,7 +100,7 @@ export class GroupFbComponent {
           second: 'uid',
           disable: this.defaultSocial?.id ? 'disabled' : '',
         },
-        searchColumns:['name']
+        searchColumns: ['name'],
       },
     });
   }

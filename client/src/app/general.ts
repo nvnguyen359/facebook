@@ -160,7 +160,7 @@ export function fields() {
     },
     {
       field: 'password',
-      type: 'text',
+      type: 'password',
       placeholder: 'Ex: *******',
       title: 'Mật khẩu',
       require: true,

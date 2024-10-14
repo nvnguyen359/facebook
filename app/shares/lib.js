@@ -16,8 +16,7 @@ Date.prototype.endDay = function () {
   return new Date(this.setHours(23, 59, 59, 999));
 };
 
-
-function isEqualObj(obj,obj1) {
+function isEqualObj(obj, obj1) {
   let result = true;
   const objArr = Object.keys(obj);
   const objArr1 = Object.keys(obj1);
@@ -30,7 +29,7 @@ function isEqualObj(obj,obj1) {
     }
   }
   return result;
-};
+}
 String.prototype.removeAccents = function () {
   return this.normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -192,49 +191,65 @@ const setEnvValue = (key, value) => {
   fs.writeFileSync("./.env", ENV_VARS.join(os.EOL));
 };
 const autoScroll = async (page, seconds = null, timerScroll = 500) => {
-
-  console.log('=== start auto scroll! ===');
+  console.log("=== start auto scroll! ===");
   let result = async () => {
-      return await page.evaluate(async ([seconds, timerScroll]) => {
-          const begin = new Date();
-          return new Promise(resolve => {
-              var totalHeight = 0;
-              var distance = 100;
-              let count = 1;
-              var timer = setInterval(() => {
-                  count++;
-                  var scrollHeight = document.body.scrollHeight;
-                  window.scrollBy(0, distance);
-                  totalHeight += distance;
-                  const check = totalHeight >= scrollHeight;
-                  if (check || seconds != null && count == seconds) {
-                      console.log('stop scroll');
-                      let end = new Date();
-                      const time = Math.round(Math.abs(end - begin) / 60);
-                      console.log(`time scroll:${time}s`);
-                      clearInterval(timer);
-                      resolve(`${end},${begin}`);
+    return await page.evaluate(
+      async ([seconds, timerScroll]) => {
+        const begin = new Date();
+        return new Promise((resolve) => {
+          var totalHeight = 0;
+          var distance = 100;
+          let count = 1;
+          var timer = setInterval(() => {
+            count++;
+            var scrollHeight = document.body.scrollHeight;
+            window.scrollBy(0, distance);
+            totalHeight += distance;
+            const check = totalHeight >= scrollHeight;
+            if (check || (seconds != null && count == seconds)) {
+              console.log("stop scroll");
+              let end = new Date();
+              const time = Math.round(Math.abs(end - begin) / 60);
+              console.log(`time scroll:${time}s`);
+              clearInterval(timer);
+              resolve(`${end},${begin}`);
+            }
+            if (count > 180 && seconds == null) {
+              console.log("stop scroll");
+              let end = new Date();
+              const time = Math.round(Math.abs(end - begin) / 60);
+              console.log(`time scroll:${time}s`);
+              clearInterval(timer);
+              resolve(`${end},${begin}`);
+            }
 
-                  }
-                  if (count > 180 && seconds == null) {
-                      console.log('stop scroll');
-                      let end = new Date();
-                      const time = Math.round(Math.abs(end - begin) / 60);
-                      console.log(`time scroll:${time}s`);
-                      clearInterval(timer);
-                      resolve(`${end},${begin}`);
-
-                  }
-
-                  console.log('scroll page... ', scrollHeight);
-              }, timerScroll);
-
-          })
-      }, [seconds, timerScroll]);
-  }
-  return `stop scroll: ${(await result())}`
+            console.log("scroll page... ", scrollHeight);
+          }, timerScroll);
+        });
+      },
+      [seconds, timerScroll]
+    );
+  };
+  return `stop scroll: ${await result()}`;
 };
-
+// Recursive function to get files
+const getFiles = (dir, files = []) => {
+  // Get an array of all files and directories in the passed directory using fs.readdirSync
+  const fileList = fs.readdirSync(dir);
+  // Create the full path of the file/directory by concatenating the passed directory and file/directory name
+  for (const file of fileList) {
+    const name = `${dir}/${file}`;
+    // Check if the current file/directory is a directory using fs.statSync
+    if (fs.statSync(name).isDirectory()) {
+      // If it is a directory, recursively call the getFiles function with the directory path and the files array
+      getFiles(name, files);
+    } else {
+      // If it is a file, push the full path to the files array
+      files.push(name);
+    }
+  }
+  return files;
+};
 module.exports = {
   getPrinters,
   createIdRow,
@@ -243,5 +258,7 @@ module.exports = {
   delay,
   moveFile,
   setEnvValue,
-  isEqualObj,autoScroll
+  isEqualObj,
+  autoScroll,
+  getFiles,
 };

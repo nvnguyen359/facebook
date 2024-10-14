@@ -13,12 +13,12 @@ import { ApiService } from 'src/app/services/api.service';
   styleUrl: './social.component.scss',
 })
 export class SocialComponent {
-  url='social'
+  url = 'social';
   optionsTable: any = {
     url: this.url,
     displayedColumns: [
       'userName',
-      'password',
+      
       'uid',
       'cookies',
       'proxy',
@@ -53,9 +53,7 @@ export class SocialComponent {
     'updatedAt',
     'createdAt',
   ];
-  options: any = {
-    displayedColumns: ['no', ...this.columns],
-  };
+
   obj = {
     id: [0],
     userName: [, Validators.required],
@@ -86,13 +84,16 @@ export class SocialComponent {
     this.openDialog();
   }
   openDialog(value: any = null) {
+    const title =Array.isArray(value)&& value[0].id
+      ? 'Cập nhật tài khoản facebook'
+      : 'Thêm tài khoản facebook';
     this.dialog.open(AdUpsertComponent, {
       data: {
         value: value,
         fields: this.fieldFilter,
         obj: this.obj,
-        title: 'Thêm tài khoản facebook',
-        url:this.url,
+        title,
+        url: this.url,
       },
     });
   }

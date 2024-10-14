@@ -225,7 +225,9 @@ const socials = async (knex) => {
     await knex.schema.createTable(tbl, (table) => {
       table.string("userName", 250).notNullable();
       table.string("password", 250).notNullable();
-      table.string("uid", 250);
+      table.string("name");
+      table.string("avatar");
+      table.string("uid");
       table.string("cookies", 250);
       table.string("proxy", 250);
       table.string("status");
@@ -276,6 +278,7 @@ const groupFb = async (knex) => {
       table.string("uid").notNullable();
       table.string("name", 250);
       table.string("member", 250);
+      table.string('avatar');
       table.boolean("status");// 
       table.string("active");
       table.string("socialId");

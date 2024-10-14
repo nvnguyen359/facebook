@@ -1,15 +1,16 @@
-<p>group-fb works!</p>
-1) Tai khoan 
-2) caapj nhat nhom
-3) kiach hoat hoac vo hieu hoa dang bai trong nhom
-tong nhom tham gia
 <div class="">
-    <mat-form-field style="margin-bottom: -16px;">
-        <mat-label>Chọn Tài Khoản</mat-label>
-        <mat-select name="social" (selectionChange)="onChange($event)">
-            <mat-option *ngFor="let item of socials" [value]="item">{{item['userName']}}</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <div class="flex center">
+        <mat-form-field style="margin-bottom: -16px;">
+            <mat-label>Chọn Tài Khoản</mat-label>
+            <mat-select name="social" (selectionChange)="onChange($event)">
+                <mat-option *ngFor="let item of socials" [value]="item">{{item['userName']}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button  mat-icon-button matTooltip="Cập Nhật Nhóm">
+            <mat-icon>play_arrow</mat-icon>
+          </button>
+          <ad-schedule [(ngModel)]="task"></ad-schedule>
+    </div>
     <ad-table [option]="option" (eventUpsert)="onUpsert($event)" [searchColumns]="searchColumns"></ad-table>
     <!-- <ad-upsert></ad-upsert> -->
     <div class="button-container-footer">

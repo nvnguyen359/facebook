@@ -60,7 +60,7 @@ class CRUDKNEX {
   }
   async update(data) {
     return new Promise(async (res, rej) => {
-      console.log(data);
+      //console.log(data);
       let result = [];
       try {
         if (!Array.isArray(data)) {
