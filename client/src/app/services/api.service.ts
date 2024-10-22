@@ -192,8 +192,8 @@ export class ApiService {
         });
     });
   }
-  async update(url: string, data: any) {
-    const pathUrl = `${this.baseServer}/${url}`;
+  async update(url: string, data: any,id='') {
+    const pathUrl = !id?`${this.baseServer}/${url}`:`${this.baseServer}/${url}/${id}`;
     return new Promise((res, rej) => {
       this.http
         .put(pathUrl, data, this.httpOptions)

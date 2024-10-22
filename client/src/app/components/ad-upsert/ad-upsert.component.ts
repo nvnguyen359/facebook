@@ -61,7 +61,6 @@ import { MatSelectModule } from '@angular/material/select';
     MatCheckboxModule,
     MatTooltipModule,
     UploadComponent,
-    
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   templateUrl: './ad-upsert.component.html',
@@ -74,6 +73,7 @@ export class AdUpsertComponent {
   numberRow = 0;
   url = '';
   localUrl: any[] = [];
+  headless = false;
   @ViewChild('files') files!: ElementRef;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -89,12 +89,11 @@ export class AdUpsertComponent {
     this.numberRow = this.data.numberRow;
     this.url = this.data.url ? this.data.url : t[t.length - 1];
     this.initForm();
-    const datalist = this.data.datalist;
-    console.log(datalist);
   }
 
   initForm() {
     let formArray = this.fb.array([]) as FormArray;
+   // console.log(this.data)
     let array: any[] = this.data.value;
     this.form = this.fb.group({
       formArray: formArray,
@@ -153,9 +152,7 @@ export class AdUpsertComponent {
     if (temp) {
       this.form.controls['formArray'].controls[index].controls[
         this.data.datalistField.second
-      ].setValue(
-        temp[this.data.datalistField.second]
-      );
+      ].setValue(temp[this.data.datalistField.second]);
     }
   }
   onSave() {
@@ -177,6 +174,17 @@ export class AdUpsertComponent {
     if (updates.length > 0) {
       this.service.update(this.url, updates);
     }
+  }
+  async onUpdateFb() {
+    const values = Array.from(this.form.value['formArray']).map((x: any) => {
+      delete x['no'];
+      return x;
+    });
+    await this.service.update(
+      'fb',
+      { headless: !this.headless, values },
+      'social'
+    );
   }
   ngAfterViewInit() {
     this.cdr.detectChanges();

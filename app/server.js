@@ -1,8 +1,9 @@
 // Import builtin NodeJS modules to instantiate the service
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
-
+const { apisFacebook }=require('./apis/apiFacebook');
 require("dotenv").config({ path: "./../.env" });
+const { getFiles } = require("./shares/lib");
 const { getListPrinter, allApisPrinter } = require("./apis/apiInfo");
 const CommunicationPort = require("./seiralPort");
 var bodyParser = require("body-parser");
@@ -64,14 +65,7 @@ io.on("connection", async (socket) => {
   //  // io.emit("message", data.toString("utf8"));
   // });
 });
-const localtunnel = require("localtunnel");
-const tunnel = localtunnel(port, { subdomain: "dev" }, (err, tunnel) => {
-  console.log(err, tunnel);
-});
 
-tunnel.on("close", function () {
-  // When the tunnel is closed
-});
 server.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
@@ -139,6 +133,8 @@ app.use(express.static("public"));
 // apis.callApis(app);
 apisSqlite(app);
 allApisPrinter(app);
+apisFacebook(app);
+
 app.use("/uploads", express.static("uploads"));
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/imgs", express.static(path.join(__dirname, "imgs")));
@@ -149,22 +145,3 @@ var options = {
 };
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 module.exports = app;
-
-const { CrawData } = require("./features/Adplaywright");
-const craw = new CrawData(false);
-(async () => {
-  await craw.setup();
-  const social = {
-    userName: "nvnguyen2504@gmail.com",
-    password: "anhduongthanhthuy",
-    id: 27,
-    avatar: "",
-    uid: "",
-    cookies: "",
-    proxy: "",
-    status: "",
-    active: "",
-  };
-  await craw.loginDesktop(social);
-  await craw.getGroupsDesktop();
-})();

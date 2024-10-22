@@ -232,6 +232,7 @@ const socials = async (knex) => {
       table.string("proxy", 250);
       table.string("status");
       table.string("active");
+      table.integer("numberLogin");
       baseData(table);
     });
     // console.log(tbl, "successfully created");
@@ -255,8 +256,10 @@ const article = async (knex) => {
       table.string("linkProducts", 250);
       table.string("comments");
       table.string("type");//media status
-      table.integer('randomMedia')
+      table.integer('randomMedia');
+      table.integer('price');
       table.boolean("active");
+      table.string('category',250)
       baseData(table);
     });
     // console.log(tbl, "successfully created");

@@ -17,11 +17,9 @@ export class SocialComponent {
   optionsTable: any = {
     url: this.url,
     displayedColumns: [
+      'avatar',
       'userName',
-      
       'uid',
-      'cookies',
-      'proxy',
       'active',
     ],
     isShowBt: true,
@@ -98,10 +96,7 @@ export class SocialComponent {
     });
   }
   onUpsert(event: any) {
-    let values: any[] = [];
-    Array.from(event).forEach((item: any) => {
-      values.push(item);
-    });
-    this.openDialog(values);
+    if(!event.isSekected)
+    this.openDialog(event.values);
   }
 }

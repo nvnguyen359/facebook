@@ -18,11 +18,12 @@
                     </th>
                     <td mat-cell *matCellDef="let element">
                         <div [ngClass]="element[column]|textAlignNumber:column" class="flex center">
-                            {{element[column]|formatValue}}<mat-checkbox *ngIf="displayCheckbox"
-                                (click)="$event.stopPropagation()"
+                            {{element[column]|formatValue}}
+                            <mat-checkbox *ngIf="displayCheckbox" (click)="$event.stopPropagation()"
                                 (change)="$event ? selection.toggle(element) : null;eventChecked()"
                                 [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
-                            </mat-checkbox></div>
+                            </mat-checkbox>
+                        </div>
 
                     </td>,<!--tbody-->
                 </ng-container>
@@ -32,11 +33,13 @@
                     <td mat-cell *matCellDef="let element">
                         <span [ngSwitch]="column">
                             <div *ngSwitchCase="'active'" style="display: flex;justify-content: end;">
-                                <mat-slide-toggle [checked]="element[column]|slidePipe" (click)="$event.stopPropagation()"
-                                    (change)="onChangeSlide($event,element)" color="accent"></mat-slide-toggle>
+                                <mat-slide-toggle [checked]="element[column]|slidePipe"
+                                    (click)="$event.stopPropagation()" (change)="onChangeSlide($event,element)"
+                                    color="accent"></mat-slide-toggle>
                             </div>
-                            <div *ngSwitchCase="false">
-
+                            <div *ngSwitchCase="'avatar'">
+                                <img [ngSrc]="element[column]" width="40" height="40"
+                                    matTooltip="Cập Nhật Các Thông Số">
                             </div>
                             <div *ngSwitchDefault>
                                 <div [ngClass]="element[column]|textAlignNumber:column">{{element[column]|formatValue}}
@@ -83,13 +86,54 @@
                         <table>
                             <thead>
                                 <th *ngFor="let item of option.displayedColumnsChild"
-                                    [ngClass]="element[item]|textAlignNumber">{{item|displayColumn}}</th>
+                                    [ngClass]="element[item]|textAlignNumber">
+                                    <div [ngSwitch]="item">
+                                        <div *ngSwitchCase="'no'">
+                                            <div class="flex center">
+                                                <div> {{item|displayColumn}}</div>
+                                                <!-- <mat-checkbox *ngIf="displayCheckbox"
+                                                    (change)="$event ? toggleAllRows() : null;eventChecked()"
+                                                    [checked]="selection.hasValue() && isAllSelected()"
+                                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                                    [aria-label]="checkboxLabel()">
+                                                </mat-checkbox> -->
+                                            </div>
+                                        </div>
+
+                                        <div *ngSwitchDefault>
+                                            {{item|displayColumn}}
+                                        </div>
+                                    </div>
+                                </th>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let x of element['details']">
                                     <td *ngFor="let item of option.displayedColumnsChild"
-                                        [ngClass]="element[item]|textAlignNumber:item"
-                                        [innerHTML]="x[item]|formatValue"></td>
+                                        [ngClass]="element[item]|textAlignNumber:item">
+                                        <div [ngSwitch]="item">
+
+                                            <div *ngSwitchCase="'no'" class="flex center">
+                                                <div [innerHTML]="x[item]|formatValue"></div>
+                                                <mat-checkbox *ngIf="displayCheckbox" (click)="$event.stopPropagation()"
+                                                    (change)="$event ? selection.toggle(x) : null;eventChecked()"
+                                                    [checked]="selection.isSelected(x)"
+                                                    [aria-label]="checkboxLabel(x)">
+                                                </mat-checkbox>
+                                            </div>
+
+                                            <div *ngSwitchCase="'avatar'">
+                                                <img [ngSrc]="x[item]" alt="" width="40" height="40">
+                                            </div>
+
+                                            <div *ngSwitchDefault>
+                                                <div [innerHTML]="x[item]|formatValue"></div>
+                                            </div>
+                                        </div>
+
+                                    </td>
+
+
+
                                 </tr>
                             </tbody>
                         </table>
@@ -99,24 +143,40 @@
 
 
             <tr mat-header-row *matHeaderRowDef="displayedColumnsWithExpand; sticky: true"></tr>
-            <tr mat-row *matRowDef="let element; columns: displayedColumnsWithExpand; index as i"
-                (click)="onRowClick(element,$event,i)" class="ad-element-row"
-                [class.ad-expanded-row]="expandedElement === element"
-                (click)="expandedElement = expandedElement === element ? null : element">
-            </tr>
+            <ng-container *ngIf="option.isClickRow==true; then thenTemplate; else elseTemplate">
+
+            </ng-container>
+            <ng-template #thenTemplate>
+                <tr mat-row *matRowDef="let element; columns: displayedColumnsWithExpand; index as i"
+                    (dblclick)="onRowClick(element,$event,i)" class="ad-element-row"
+                    matTooltip="DOUBLE CLICK!    Cập nhật " matTooltipPosition="above"
+                    [class.ad-expanded-row]="expandedElement === element"
+                    (click)="expandedElement = expandedElement === element ? null : element">
+            </ng-template>
+            <ng-template #elseTemplate>
+                <tr mat-row *matRowDef="let element; columns: displayedColumnsWithExpand; index as i"
+                    (click)="onRowClick(element,$event,i)" class="ad-element-row"
+                    matTooltip="CLICK!    Nếu chọn từ danh sách!" matTooltipPosition="above"
+                    [class.ad-expanded-row]="expandedElement === element"
+                    (click)="expandedElement = expandedElement === element ? null : element">
+            </ng-template>
+
 
             <ng-container *ngIf="option.displayedColumnsChild; ">
                 <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="ad-detail-row"></tr>
             </ng-container>
+            <ng-container *ngIf="option.isShowFooter">
+                <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+            </ng-container>
 
-            <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+
         </table>
 
     </div>
     <!-- <mat-paginator [pageSizeOptions]="pageSizes" showFirstLastButtons [length]="resultsLength" [pageSize]="pageSize" 
         (page)="getServerData($event)" aria-label="Select page of periodic elements"></mat-paginator>-->
     <div class="flex center" style="justify-content: flex-end;">
-        <div *ngIf="option.isShowBt">
+        <div *ngIf="option.isShowBt || !option.isList">
             <button mat-flat-button color="primary" [disabled]="isUpsert" (click)="onUpdates()"
                 style="margin-right: 8px;">Cập Nhật
                 &nbsp;<mat-icon>update</mat-icon></button>
@@ -124,7 +184,7 @@
                 &nbsp;<mat-icon>delete</mat-icon></button>
         </div>
 
-        <div>
+        <div *ngIf="!option.isList">
             <mat-paginator [length]="resultsLength" [pageSize]="pageSize" (page)="getServerData($event)"
                 style="width: 100%;" [pageSizeOptions]="[pageSize, 25, 100,1000,5000]" showFirstLastButtons="true">
             </mat-paginator>

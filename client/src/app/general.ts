@@ -43,6 +43,8 @@ export enum BaseApiUrl {
   PostGroup = 'postGroup',
   Article = 'article',
   ReportArticle = 'reportArticle',
+  RunningPlan = 'fb',
+  Run='run'
 }
 export enum fieldData {
   importPrice = 'importPrice',
@@ -212,7 +214,7 @@ export function fields() {
       placeholder: 'Ex: ',
       title: 'Trạng Thái',
     },
-    
+
     //article
     {
       field: 'title',
@@ -268,7 +270,7 @@ export function fields() {
       placeholder: 'Ex: media|status',
       title: 'Kiểu',
     },
-   
+
     {
       field: 'randomMedia',
       type: 'number',
@@ -281,21 +283,21 @@ export function fields() {
       type: 'text',
       placeholder: 'Ex: Chợ tốt.',
       title: 'Tên Group',
-      require:true
+      require: true,
     },
     {
       field: 'articleId',
       type: 'number',
       placeholder: 'Ex: ...',
       title: 'Id Bài Viết',
-      require:true
+      require: true,
     },
     {
       field: 'count',
       type: 'number',
       placeholder: 'Ex: số bài đăng',
       title: 'Id Group',
-      require:false
+      require: false,
     },
     //================
     {

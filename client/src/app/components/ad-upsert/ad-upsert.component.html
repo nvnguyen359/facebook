@@ -95,7 +95,11 @@
             </div>
         </div>
 
-        <div class="flex row group-button" style="justify-content: end;margin-top:8px">
+        <div class="flex row center group-button" style="justify-content: end;margin-top:8px">
+            <mat-checkbox  matTooltip="Hiển thị trình duyệt" [(ngModel)]="headless"  [ngModelOptions]="{standalone: true}" >Show browser</mat-checkbox>
+            <button  mat-icon-button mat-dialog-close matTooltip="Cập Nhật Lại" type="button" color="accent" [disabled]="!form.valid" style="margin-right: 8px;" (click)="onUpdateFb()">
+                <mat-icon>play_arrow</mat-icon>
+              </button>
             <button mat-flat-button type="submit" mat-dialog-close color="success" [disabled]="!form.valid"
                 style="margin-right: 8px;">Lưu <mat-icon>save</mat-icon></button>
             <button mat-flat-button type="button" color="primary" (click)="onAdd(1)">Thêm Mới

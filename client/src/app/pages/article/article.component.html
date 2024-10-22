@@ -1,9 +1,67 @@
-<div class="">
-    <ad-table [option]="option" (eventUpsert)="onUpsert($event)"></ad-table>
-    <!-- <ad-upsert></ad-upsert> -->
-    <div class="button-container-footer">
-        <button mat-fab (click)=" onCreate()">
-            <mat-icon>add</mat-icon>
-        </button>
-    </div>
+<div class="flex row" style="margin-top: 8px;">
+  <div class="flex">
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <mat-tab-group mat-stretch-tabs="true" dynamicHeight mat-align-tabs="start"
+          (selectedTabChange)="onSelectedTabChange($event)">
+          <mat-tab>
+            <ng-template mat-tab-label>
+              Danh Sách Tài Khoản
+            </ng-template>
+            <ng-template matTabContent>
+              <ad-table [option]="optionsSocial" (eventUpsert)="onUpsertSocial($event)"></ad-table>
+            </ng-template>
+          </mat-tab>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              Danh Sách Group
+              <button mat-icon-button matTooltip="Chọn tài khoản" [matMenuTriggerFor]="menu"
+                aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </ng-template>
+
+            <ng-template matTabContent>
+              <ad-table [option]="optionsGroups" [filters]="filterGroups"
+                (eventUpsert)="onUpsertGroups($event)"></ad-table>
+            </ng-template>
+          </mat-tab>
+
+        </mat-tab-group>
+      </mat-card-content>
+    </mat-card>
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <h4 style="margin-top: 10px;">Danh Sách Bài Viết</h4>
+        <ad-table [option]="option" (eventUpsert)="onUpsert($event)"></ad-table>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <mat-card class="full-width" style="margin-top: 8px;">
+    <mat-card-content>
+      <div class="flex center full-width schedule" >
+        <button mat-raised-button [color]="playPause.color" type="button" [disabled]="disabled" (click)="onPlayPause($event)"><mat-icon>{{playPause.icon}}</mat-icon><span>{{playPause.text}}</span></button>
+        <button mat-raised-button type="button"><mat-icon >calendar_today</mat-icon><span>Lên Lịch</span></button>
+        <button mat-raised-button type="button"><mat-icon >settings</mat-icon><span>Cài Đặt</span></button>
+        <mat-checkbox   [(ngModel)]="headless"  color="primary" matTooltip="Hiển thị trình duyệt" style="color: blueviolet;">
+          Show browser
+          </mat-checkbox>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+
+  <!-- <ad-upsert></ad-upsert> -->
+  <div class="button-container-footer">
+    <button mat-fab (click)=" onCreate()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
 </div>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="onClickChoise(item)" *ngFor="let item of socials">
+    <img *ngIf="item.avatar" [ngSrc]="item.avatar" alt="" width="40" height="40">
+    <span>{{item?.name}}</span>
+  </button>
+
+</mat-menu>

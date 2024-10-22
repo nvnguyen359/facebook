@@ -1,22 +1,27 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'formatValue', standalone: true,
+  name: 'formatValue',
+  standalone: true,
 })
 export class FormatValuePipe implements PipeTransform {
-
-  transform(value: string): string {
+  transform(value: any): string {
     if (value == undefined) return value;
-  
-    if (this.isNumeric(value)) {
-      return parseInt(value).toLocaleString('vi');
+    const pattern = /^[A-Za-z]/g;
+    if (pattern.test(`${value}`)) {
+      return value;
+    }
+    if (typeof value == 'string') {
+      return `${value}`;
+    }
+    if (typeof value == 'number') {
+      return value.toLocaleString('vi');
+    }
+    if (`${value}`.includes('%')) return `${value}`;
+    if (value instanceof Date) {
+      return new Date(value).toLocaleDateString('vi');
     } else {
-      if(`${value}`.includes('%')) return value;
-      if (new Date(value).toString() != "Invalid Date") {
-        return new Date(value).toLocaleDateString("vi");
-      } else {
-        return value;
-      }
+      return `${value}`;
     }
   }
   isNumeric(str: any) {

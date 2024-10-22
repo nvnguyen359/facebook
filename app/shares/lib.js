@@ -234,6 +234,7 @@ const autoScroll = async (page, seconds = null, timerScroll = 500) => {
 };
 // Recursive function to get files
 const getFiles = (dir, files = []) => {
+//  console.log(dir)
   // Get an array of all files and directories in the passed directory using fs.readdirSync
   const fileList = fs.readdirSync(dir);
   // Create the full path of the file/directory by concatenating the passed directory and file/directory name

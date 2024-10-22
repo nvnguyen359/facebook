@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { Route, Router } from '@angular/router';
+import { WithConfig } from 'ng-zorro-antd/core/config';
 import { AdUpsertComponent } from 'src/app/components/ad-upsert/ad-upsert.component';
-import { fields, Status } from 'src/app/general';
+import { DialogConfirmComponent } from 'src/app/Components/dialog-confirm/dialog-confirm.component';
+import { BaseApiUrl, fields, Status } from 'src/app/general';
 import { Fields } from 'src/app/Models/field';
 import { ApiService } from 'src/app/services/api.service';
 import { DataService } from 'src/app/services/data.service';
@@ -14,7 +17,16 @@ import { DataService } from 'src/app/services/data.service';
 })
 export class GroupFbComponent {
   task: any;
-  url = 'groupFb';
+  columns = [
+    'name',
+    'socialId',
+    'groupId',
+    'member',
+    'active',
+    'updatedAt',
+    'createdAt',
+  ];
+  url = BaseApiUrl.groupFb;
   option: any = {
     url: this.url,
     displayedColumns: ['name', 'groupId', 'member', 'active'],
@@ -28,24 +40,21 @@ export class GroupFbComponent {
   constructor(
     private dialog: MatDialog,
     private service: ApiService,
-    private dataService: DataService
+    private dataService: DataService,
+    private router: Router
   ) {
     this.fieldFilter = (fields() as Fields[])
       .filter((x: any) => this.columns.includes(x.field))
       .map((x: Fields) => {
-        x.show = x.field == 'updatedAt' || x.field == 'createdAt';
+        if (x.field == 'updatedAt' || x.field == 'createdAt') {
+          x.show = false;
+        } else {
+          x.show = true;
+        }
         return x;
       });
   }
-  columns = [
-    'name',
-    'socialId',
-    'groupId',
-    'member',
-    'active',
-    'updatedAt',
-    'createdAt',
-  ];
+
   options: any = {
     displayedColumns: ['no', ...this.columns],
   };
@@ -53,6 +62,44 @@ export class GroupFbComponent {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.socials = (await this.service.get('social')).items;
+    if (this.socials.length == 0) {
+      const refDialog = this.dialog.open(DialogConfirmComponent, {
+        data: {
+          header:
+            'Chưa có danh sách tài khoản fb bạn phải thêm hoặc cập nhật tài khoản',
+        },
+      });
+      refDialog.afterClosed().subscribe((e: any) => {
+        if (e) {
+          this.router.navigate([`/${BaseApiUrl.Social}`]);
+        }
+      });
+    }
+
+    await this.getGroups(this.socials);
+  }
+  async getGroups(socials: any[] = []) {
+    const t = await this.service.get(BaseApiUrl.groupFb, { limit: 1 });
+    if (t.count == 0) {
+      const refDialog = this.dialog.open(DialogConfirmComponent, {
+        data: {
+          header: 'Danh sách các group chưa có, bạn muốn tự động cập nhật!',
+        },
+      });
+      refDialog.afterClosed().subscribe(async (e: any) => {
+        if (e) {
+          // console.log(socials)
+          await this.getGroupsApi(socials);
+        }
+      });
+    }
+  }
+  async getGroupsApi(socials: any[] = []) {
+    this.service
+      .update(`fb`, { values: socials, headless: false }, BaseApiUrl.groupFb)
+      .then((result: any) => {
+        console.log(result);
+      });
   }
   obj = {
     id: [0],
@@ -75,7 +122,7 @@ export class GroupFbComponent {
       status: [item?.status],
       groupId: [item?.groupId, Validators.required],
       active: [item.active],
-      socialId: [''],
+      socialId: [item?.socialId],
       createdAt: item.createdAt,
       updatedAt: new Date(),
     };
@@ -87,6 +134,7 @@ export class GroupFbComponent {
   }
   openDialog(value: any = null) {
     //console.log(this.defaultSocial?.id?'disabled':'')
+    // console.log( this.obj)
     this.dialog.open(AdUpsertComponent, {
       data: {
         value: value,
@@ -105,14 +153,14 @@ export class GroupFbComponent {
     });
   }
   onUpsert(event: any) {
-    let values: any[] = [];
-    Array.from(event).forEach((item: any) => {
-      values.push(item);
-    });
-    this.openDialog(values);
+   if(!event.isSekected)
+   {
+   // this.openDialog(event.values);
+   }
   }
-  onChange(event: any) {
+  async onChange(event: any) {
     this.defaultSocial = event.value;
+   // await this.getGroupsApi([this.defaultSocial]);
     this.obj.socialId = this.defaultSocial?.id;
     this.obj.uid = this.defaultSocial?.uid;
     this.dataService.sendMessage({

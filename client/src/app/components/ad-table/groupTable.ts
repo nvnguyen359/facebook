@@ -15,7 +15,7 @@ export class GroupITable {
   get Data() {
     return this._data;
   }
-  get customData():any[] {
+  get customData(): any[] {
     const arr = Array.from(this._data);
 
     const dates = [
@@ -29,22 +29,32 @@ export class GroupITable {
         (a: any) => new Date(a.createdAt).toLocaleDateString('vi') == date
       );
       let obj: any = {};
-      
 
       obj['createdAt'] = date;
-      obj['details'] = arrayfilter.map((a:any,index:number)=>{ a.no = index+1;return a});
-      //  console.log(arrayfilter.length)
+      obj['details'] = arrayfilter.map((a: any, index: number) => {
+        a.no = index + 1;
+        return a;
+      });
+
       this._groupColumns.forEach((x: string) => {
         if (x.includes('At')) return;
-        const sum = arrayfilter.filter(y=>y[x]!=null)
-          .map((a) => a[x])
-          .reduce((x1, y1) => parseFloat(x1) + parseFloat(y1), 0);
-        obj[x] = Number.isNaN(sum) ? 0 : sum;
+        const filter = arrayfilter.filter((y) => y[x] != null).map((a) => a[x]);
+        const asString = [...new Set(filter)];
+        if (asString.length == 1) {
+          obj[x] = `${asString[0]}`;
+        } else {
+          let sum = filter
+            .filter((x) => {
+              return typeof x == 'number';
+            })
+            .reduce((x1, y1) => x1 + y1, 0);
+          obj[x] = Number.isNaN(sum) ? 0 : sum;
+        }
       });
       obj['no'] = index + 1;
       array.push(obj);
     });
-
+    console.log(array[0]);
     return array;
   }
 }
