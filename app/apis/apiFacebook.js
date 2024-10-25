@@ -13,7 +13,7 @@ const runWork = async (app, url) => {
             if (values.length > 0) {
               for (let index = 0; index < values.length; index++) {
                 const element = values[index];
-                await craw.loginMobile(element);
+                await craw.loginDesktop(element);
                 await craw.close();
               }
             }
@@ -21,7 +21,8 @@ const runWork = async (app, url) => {
           break;
         case "groupFb":
           {
-            //console.log('groupFb',values)
+            console.log("groupFb");
+
             if (values.length > 0) {
               for (let index = 0; index < values.length; index++) {
                 const element = values[index];
@@ -31,14 +32,14 @@ const runWork = async (app, url) => {
             }
           }
           break;
-        case 'article':
+        case "article":
           {
-//console.log('article',values)
-            const articies= values?.articies;
-            const groups= values?.groups;
-            const socials= values?.socials;
-          // console.log(articies?.length,groups?.length)
-           await craw.newfeedDesktop(socials[0],articies[0])
+            console.log("article");
+            const articies = values?.articies;
+            const groups = values?.groups;
+            const socials = values?.socials;
+            // console.log(articies?.length,groups?.length)
+            await craw.newfeedDesktop(socials[0], articies[0]);
           }
           break;
         default:

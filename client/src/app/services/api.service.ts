@@ -100,7 +100,7 @@ export class ApiService {
     });
   }
   async get(url: string, params?: any, name = ''): Promise<any> {
- //  console.log(params)
+    //  console.log(params)
     let pas = '';
     if (params) {
       const entries = Object.entries(params);
@@ -131,6 +131,17 @@ export class ApiService {
           }
         });
     });
+  }
+  async removeNo(data: any) {
+    if (Array.isArray(data)) {
+      data = Array.from(data).map((x: any) => {
+        delete x.no;
+        return x;
+      });
+    } else {
+      delete data['no'];
+    }
+    return data;
   }
   async findAll(params?: any, name = '', url: string = ''): Promise<any> {
     if (url == '') url = this.hash;
@@ -192,8 +203,11 @@ export class ApiService {
         });
     });
   }
-  async update(url: string, data: any,id='') {
-    const pathUrl = !id?`${this.baseServer}/${url}`:`${this.baseServer}/${url}/${id}`;
+  async update(url: string, data: any, id = '') {
+    data = await this.removeNo(data);
+    const pathUrl = !id
+      ? `${this.baseServer}/${url}`
+      : `${this.baseServer}/${url}/${id}`;
     return new Promise((res, rej) => {
       this.http
         .put(pathUrl, data, this.httpOptions)
@@ -210,6 +224,7 @@ export class ApiService {
     });
   }
   async update1(data: any, url: string = '') {
+    data = await this.removeNo(data);
     if (url == '') url = this.hash;
     const pathUrl = `${this.baseServer}/${url}`;
     return new Promise((res, rej) => {
@@ -227,12 +242,14 @@ export class ApiService {
     });
   }
   async create1(data: any, url: string = '') {
+    
     if (url == '') url = this.hash;
     let req = !Array.isArray(data) ? [data] : data;
     req = Array.from(req).map((x: any) => {
       if (!x.id || x.id == '') x['id'] = null;
       return x;
     });
+    req = await this.removeNo(req);
     const pathUrl = `${this.baseServer}/${url}`;
     return new Promise((res, rej) => {
       this.http
@@ -254,6 +271,7 @@ export class ApiService {
       if (!x.id || x.id == '') x['id'] = null;
       return x;
     });
+    req = await this.removeNo(req);
     const pathUrl = `${this.baseServer}/${url}`;
     return new Promise((res, rej) => {
       this.http

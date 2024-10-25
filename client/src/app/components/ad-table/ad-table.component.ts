@@ -117,6 +117,7 @@ export class AdTableComponent {
   isShowMes = true;
   @Output() eventDelete = new EventEmitter();
   @Output() eventUpsert = new EventEmitter();
+  @Output() eventData = new EventEmitter();
   count = 0;
   isUpsert: boolean = true;
   oldData: any[] = [];
@@ -130,6 +131,7 @@ export class AdTableComponent {
     this.condition = {};
     this.condition.limit = this.pageSize;
     if (this.option.isList) this.condition.limit = 10000;
+    if(this.option.showActive==undefined)this.option.showActive= true;
     // console.log('this.option.isClickRow',this.option.isClickRow, this.option.url)
     if (this.option.isClickRow == undefined) {
       this.option.isClickRow = true;
@@ -285,6 +287,9 @@ export class AdTableComponent {
           if (array.length == 0) {
             this.isShowMes = true;
           }
+          if(this.option.showActive==false)array = Array.from(array).filter((x:any)=>x.active==true)
+      
+          this.eventData.emit(array);
           await this.initData(array);
           this.oldData = array;
         }

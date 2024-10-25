@@ -66,7 +66,12 @@ export function links() {
     {
       text: 'Bài Viết',
       link: `/${BaseApiUrl.Article}`,
-      icon: 'shopping_basket',
+      icon: 'create',
+    },
+    {
+      text: 'Lịch Sử Bài Viết',
+      link: `/${BaseApiUrl.ReportArticle}`,
+      icon: 'history',
     },
     {
       text: 'Nhóm',

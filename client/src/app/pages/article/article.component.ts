@@ -75,6 +75,7 @@ export class ArticleComponent {
     displayCheckbox: true,
     isList: true,
     isClickRow: false,
+    showActive: false,
   };
   optionsGroups: any = {
     displayedColumns: [...this.columnsGroups],
@@ -141,7 +142,7 @@ export class ArticleComponent {
     }
   }
   onUpsertSocial(event: any) {
-    this.plans.socials = event;
+    this.plans.socials = this.removeNo(event);
     this.isDisaled();
   }
   isDisaled() {
@@ -152,7 +153,7 @@ export class ArticleComponent {
   }
   onUpsertGroups(event: any) {
     //console.log(event);
-    this.plans.groups = event;
+    this.plans.groups = this.removeNo(event);
     this.isDisaled();
   }
   onSelectedTabChange(event: any) {
@@ -160,27 +161,48 @@ export class ArticleComponent {
     //  this.optionsGroups.isClickRow= false;
     //  }
   }
-  ngOnInit(): void {
-    this.service.get(BaseApiUrl.Social).then((e: any) => {
-      this.socials = e.items;
-    });
-    //  this.plans.headless= this.headless;
+  ngOnInit(): void {}
+  eventDataSocial(data: any[]) {
+    this.socials = data;
   }
   onClickChoise(social: any) {
     this.filterGroups = { uid: social.uid, url: BaseApiUrl.groupFb };
   }
   playPause = { icon: 'play_arrow', text: 'Play', color: 'primary' };
+  removeNo(data: any) {
+    if (Array.isArray(data)) {
+      data = Array.from(data).map((x: any) => {
+        delete x.no;
+        return x;
+      });
+    } else {
+      delete data['no'];
+    }
+    return data;
+  }
   onPlayPause(event: any) {
     this.playPause =
       this.playPause.text == 'Play'
         ? { icon: 'pause', text: 'Pause', color: 'warn' }
         : { icon: 'play_arrow', text: 'Play', color: 'primary' };
 
-    this.service.update(
-      BaseApiUrl.RunningPlan,
-      { headless: this.headless, values: this.plans },
-      BaseApiUrl.Article
-    );
+    if (this.plans?.articies.length > 0) {
+      this.plans.articies= this.removeNo(this.plans.articies)
+      this.service.update(
+        BaseApiUrl.RunningPlan,
+        { headless: this.headless, values: this.plans },
+        BaseApiUrl.Article
+      );
+    }
+    if (this.plans?.groups?.length > 0) {
+      this.plans.groups= this.removeNo(this.plans.groups)
+      this.service.update(
+        BaseApiUrl.RunningPlan,
+        { headless: this.headless, values: this.plans },
+        BaseApiUrl.groupFb
+      );
+    }
+
     //event.stopPropagation();
   }
 }

@@ -117,8 +117,12 @@ class CrawData {
   }
   //#endregion
   async loginDesktop(social) {
+    if (social?.no) delete social.no;
     if (!social.numberLogin) social.numberLogin = 0;
-
+//console.log(social)
+    social.numberLogin = social.numberLogin + 1;
+    crudKnex.setTable = "social";
+    await crudKnex.update(social);
     try {
       await this.setup();
     } catch (error) {
@@ -130,7 +134,7 @@ class CrawData {
     const expires = new Date(social.createdAt).addDays(200);
     const today = new Date();
     if (social.cookies && social.numberLogin < 4) {
-      await this.setCookies(social.cookies);
+      await this.setCookies(JSON.parse(social.cookies));
       await page.waitForTimeout(800);
       await page.goto(this._url);
       await page.waitForURL(this._url);
@@ -155,11 +159,12 @@ class CrawData {
       await this._page.waitForTimeout(1000);
       await page.getByTestId("royal_login_button").click();
       await page.waitForTimeout(1000);
-      // click vao trang chu
-      await page.click(`a[href*="${this._url}"]`);
-      await page.waitForURL(`${this._url}**`);
-      await page.waitForTimeout(3000);
+
       if (this.UpdateSocial) {
+        // click vao trang chu
+        await page.click(`a[href*="${this._url}"]`);
+        await page.waitForURL(`${this._url}**`);
+        await page.waitForTimeout(3000);
         await page.waitForSelector("span>h1");
         social.name = await page.$eval("span>h1", (node) => node.textContent);
         social.avatar = await this.getAvatar();
@@ -170,14 +175,10 @@ class CrawData {
         ).value;
         // social.active = 1;
         this._uid = social.uid;
-        social.numberLogin = 0;
+        //social.numberLogin = 0;
       }
     }
-    if (this.UpdateSocial) {
-      social.numberLogin = social.numberLogin + 1;
-      crudKnex.setTable = "social";
-      crudKnex.update(social);
-    }
+    await crudKnex.update(social);
   }
   async loginMobile(social) {
     this._url = "https://m.facebook.com/";
@@ -488,7 +489,7 @@ class CrawData {
       const fileChooser = await fileChooserPromise;
       await fileChooser.setFiles(pathFiles);
     } catch (error) {
-      await page.locator('[type="file"]').setInputFiles(fileps);
+      await page.locator('[type="file"]').setInputFiles(pathFiles);
     }
   }
   async randomUploads(files) {
@@ -503,13 +504,36 @@ class CrawData {
     return [...new Set(fileUploads)];
   }
   async newfeedDesktop(social, article) {
-    const page = this._page;
-    this.UpdateSocial=false;
+    this.UpdateSocial = false;
     await this.loginDesktop(social);
-    
+    const page = this._page;
+    await page.goto(`https://www.facebook.com/${social.uid}`);
+    await delay(3000);
+    console.log('bat dau : click ban dang nghi gi')
+    // await page.evaluate(()=>{
+    //   document.querySelector('[data-pagelet="ProfileComposer"] [role="button"] div span').click()
+    // })// bạn đang nghĩ gì
+   // await page.getByText("Bạn đang nghĩ gì?").click();
+   await page.locator('[data-pagelet="ProfileComposer"] [role="button"] div span').click()
+    const folderMedia = article?.media;
+    if (folderMedia) {
+      const files = getFiles(folderMedia);
+      const filesUpload = await this.randomUploads(files);
+     console.log('upload file')
+      const tect = "Thêm ảnh/video";
+      try {
+      //  await page.getByText(tect).click();
+        await delay(2000);
+        await this.uploadFiles('[aria-label="Ảnh/video"]', filesUpload,page);
+        console.log('xong')
+      } catch (error) {}
+      await page.getByText("Tiếp").click();
+      await delay(2000);
+      await page.getByText("Đăng").click();
+    }
+    //await this.close();
   }
   async isGroupDiscuss(page, folderMedia, content) {
-
     if (await this.isLangugeEn()) {
       await page.getByText("Write something...").click();
       await delay(1000);
@@ -546,9 +570,7 @@ class CrawData {
       });
     }
   }
-  async sellSomething(page) {
-    
-  }
+  async sellSomething(page) {}
   async postGroup(article, idGroup) {
     let content = article.content;
     const linkProducts = article?.linkProducts;
@@ -567,9 +589,9 @@ class CrawData {
       }
     } else {
       if (page.$("text='Bán gì đó'")) {
-        await this.sellSomething(page)
+        await this.sellSomething(page);
       } else {
-        await this.isGroupDiscuss(page,folderMedia,content);
+        await this.isGroupDiscuss(page, folderMedia, content);
       }
     }
   }

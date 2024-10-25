@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ReportArticleRoutingModule } from './report-article-routing.module';
 import { ReportArticleComponent } from './report-article.component';
+import { AdTableComponent } from 'src/app/components/ad-table/ad-table.component';
 
 
 @NgModule({
@@ -11,7 +12,7 @@ import { ReportArticleComponent } from './report-article.component';
   ],
   imports: [
     CommonModule,
-    ReportArticleRoutingModule
+    ReportArticleRoutingModule,AdTableComponent
   ]
 })
 export class ReportArticleModule { }

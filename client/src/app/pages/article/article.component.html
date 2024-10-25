@@ -9,7 +9,7 @@
               Danh Sách Tài Khoản
             </ng-template>
             <ng-template matTabContent>
-              <ad-table [option]="optionsSocial" (eventUpsert)="onUpsertSocial($event)"></ad-table>
+              <ad-table [option]="optionsSocial" (eventData)="eventDataSocial($event)" (eventUpsert)="onUpsertSocial($event)"></ad-table>
             </ng-template>
           </mat-tab>
           <mat-tab>
