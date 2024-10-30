@@ -1,6 +1,8 @@
 const { exec } = require("child_process");
+const { Downloader } = require("nodejs-file-downloader");
 const fs = require("fs");
 const os = require("os");
+const path= require('path');
 Date.prototype.addHours = function (h) {
   this.setTime(this.getTime() + h * 60 * 60 * 1000);
   return this;
@@ -9,13 +11,40 @@ Date.prototype.addDays = function (d = 0) {
   this.setTime(this.getTime() + 24 * 60 * 60 * 1000 * d);
   return this;
 };
+Date.prototype.subDays = function (d = new Date()) {
+  return (this.getTime() - new Date(d).getTime()) / (24 * 60 * 60 * 1000);
+};
 Date.prototype.startDay = function () {
   return new Date(this.setHours(0, 0, 0, 0));
 };
 Date.prototype.endDay = function () {
   return new Date(this.setHours(23, 59, 59, 999));
 };
+async function downloadFile(url) {
+ 
+  return new Promise(async (res, rej) => {
 
+    let filePath1 = "";
+    const fileName = new Date().getTime() + Math.floor(Math.random() * 100000)+'.jpg';
+    const downloader = new Downloader({
+      url,
+      directory: path.resolve(__dirname,'downloads'),
+      fileName, //This will be the file name.
+    });
+    console.log("downloader");
+    try {
+      const { filePath, downloadStatus } = await downloader.download(); //Downloader.download() resolves with some useful properties.
+      filePath1 = filePath;
+      console.log("All done");
+    } catch (error) {
+      //IMPORTANT: Handle a possible error. An error is thrown in case of network errors, or status codes of 400 and above.
+      //Note that if the maxAttempts is set to higher than 1, the error is thrown only if all attempts fail.
+      console.log("Download failed", error);
+    }
+    console.log("filePath1", filePath1);
+    res(filePath1);
+  });
+}
 function isEqualObj(obj, obj1) {
   let result = true;
   const objArr = Object.keys(obj);
@@ -234,7 +263,7 @@ const autoScroll = async (page, seconds = null, timerScroll = 500) => {
 };
 // Recursive function to get files
 const getFiles = (dir, files = []) => {
-//  console.log(dir)
+  //  console.log(dir)
   // Get an array of all files and directories in the passed directory using fs.readdirSync
   const fileList = fs.readdirSync(dir);
   // Create the full path of the file/directory by concatenating the passed directory and file/directory name
@@ -262,4 +291,5 @@ module.exports = {
   isEqualObj,
   autoScroll,
   getFiles,
+  downloadFile,
 };

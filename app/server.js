@@ -1,7 +1,7 @@
 // Import builtin NodeJS modules to instantiate the service
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
-const { apisFacebook }=require('./apis/apiFacebook');
+const { apisFacebook } = require("./apis/apiFacebook");
 require("dotenv").config({ path: "./../.env" });
 const { getFiles } = require("./shares/lib");
 const { getListPrinter, allApisPrinter } = require("./apis/apiInfo");
@@ -131,15 +131,18 @@ app.use(
 // inside public directory.
 app.use(express.static("public"));
 // apis.callApis(app);
-apisSqlite(app);
-allApisPrinter(app);
-apisFacebook(app);
 
+//console.log(path.join(__dirname, "downloads"))
 app.use("/uploads", express.static("uploads"));
+//app.use("downloads", express.static(path.join(__dirname, "downloads")));
+app.use(express.static(__dirname + '/downloads')); 
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/imgs", express.static(path.join(__dirname, "imgs")));
 app.use("/public", express.static("public"));
 app.use("/app/public", express.static("public"));
+apisSqlite(app);
+allApisPrinter(app);
+apisFacebook(app);
 var options = {
   explorer: true,
 };

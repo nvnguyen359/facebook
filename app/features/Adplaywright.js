@@ -3,6 +3,8 @@ const { chromium, devices } = require("playwright");
 const { autoScroll, delay, getFiles } = require("../shares/lib");
 const shortUrl = require("node-url-shortener");
 const crudKnex = new CRUDKNEX();
+const lib = require("./../shares/lib");
+const knex = require("knex");
 /**
  * url
  * headless
@@ -36,7 +38,7 @@ class CrawData {
     this._updateSocial = flag;
   }
   get UpdateSocial() {
-    if (!this._updateSocial) this._updateSocial = true;
+    // if (!this._updateSocial) this._updateSocial = true;
     return this._updateSocial;
   }
   /**
@@ -105,7 +107,8 @@ class CrawData {
       }
       return result;
     });
-    return await this.shortLink(url);
+  
+    return url;
   }
   async getNumberGroup() {
     const page = this._page;
@@ -115,14 +118,25 @@ class CrawData {
         .textContent.replace(/[^0-9]/g, "");
     });
   }
+  async getInfoSocial(page, social) {
+    await page.goto(`${this._url}${social.uid}`);
+    try {
+      await page.waitForSelector("span>h1");
+      social.name = await page.$eval("span>h1", (node) => node.textContent);
+      social.avatar = await lib.downloadFile(await this.getAvatar());
+      console.log(social)
+    } catch (error) {}
+    let cookies = await this.getCookies();
+    social.cookies = JSON.stringify(cookies);
+    social.uid = Array.from(cookies).find((x) => x["name"] == "c_user").value;
+    return social;
+  }
   //#endregion
-  async loginDesktop(social) {
+  async loginDesktop(social, isUpdate = false) {
     if (social?.no) delete social.no;
     if (!social.numberLogin) social.numberLogin = 0;
-//console.log(social)
-    social.numberLogin = social.numberLogin + 1;
+    //console.log(social)
     crudKnex.setTable = "social";
-    await crudKnex.update(social);
     try {
       await this.setup();
     } catch (error) {
@@ -131,16 +145,15 @@ class CrawData {
 
     const page = this._page;
     this._socialId = social.id;
-    const expires = new Date(social.createdAt).addDays(200);
+    const updatedAt = new Date(social.updatedAt);
     const today = new Date();
-    if (social.cookies && social.numberLogin < 4) {
+    if (social.cookies && updatedAt.subDays() < 10) {
       await this.setCookies(JSON.parse(social.cookies));
       await page.waitForTimeout(800);
       await page.goto(this._url);
       await page.waitForURL(this._url);
       await page.waitForTimeout(2000);
       const getIdEmail = await page.$("#email"); //await page.locator('#email');
-
       //console.log(getIdEmail)
       if (getIdEmail) {
         await page.locator("#email").focus();
@@ -149,6 +162,10 @@ class CrawData {
         await page.keyboard.type(social.password, { delay: 210 });
         await page.getByTestId("royal_login_button").click();
         await page.waitForTimeout(2000);
+      }
+      if (isUpdate) {
+        social = await this.getInfoSocial(page, social);
+        await crudKnex.update(social);
       }
     } else {
       await page.getByPlaceholder("Email address or phone number").focus();
@@ -160,25 +177,17 @@ class CrawData {
       await page.getByTestId("royal_login_button").click();
       await page.waitForTimeout(1000);
 
-      if (this.UpdateSocial) {
-        // click vao trang chu
-        await page.click(`a[href*="${this._url}"]`);
-        await page.waitForURL(`${this._url}**`);
-        await page.waitForTimeout(3000);
-        await page.waitForSelector("span>h1");
-        social.name = await page.$eval("span>h1", (node) => node.textContent);
-        social.avatar = await this.getAvatar();
-        let cookies = await this.getCookies();
-        social.cookies = JSON.stringify(cookies);
-        social.uid = Array.from(cookies).find(
-          (x) => x["name"] == "c_user"
-        ).value;
-        // social.active = 1;
-        this._uid = social.uid;
-        //social.numberLogin = 0;
-      }
+      console.log("click vao trang chu");
+      await page.click(`a[href*="${this._url}"]`);
+      await page.waitForURL(`${this._url}**`);
+      await page.waitForTimeout(3000);
+      social = await this.getInfoSocial(page, social);
+
+      // social.active = 1;
+      this._uid = social.uid;
+      await crudKnex.update(social);
+      console.log("update");
     }
-    await crudKnex.update(social);
   }
   async loginMobile(social) {
     this._url = "https://m.facebook.com/";
@@ -235,7 +244,7 @@ class CrawData {
         '[aria-label="Edit profile photo"]> [role="img"]> img',
         (node) => node.src
       );
-      social.avatar = await this.shortLink(linkAvater);
+      social.avatar = linkAvater;
       let cookies = await this.getCookies();
       social.cookies = JSON.stringify(cookies);
       social.uid = Array.from(cookies).find((x) => x["name"] == "c_user").value;
@@ -292,7 +301,7 @@ class CrawData {
 
       const flast = divFlast[divFlast.length - 1];
       Array.from(divs).forEach(async (item, index) => {
-        item.avatar = await this.shortLink(item.avatar);
+        item.avatar = await lib.downloadFile( item.avatar );
         let group = await crudKnex.findOne({ groupId: item.groupId });
         if (group) {
           group.name = item.name;
@@ -359,12 +368,13 @@ class CrawData {
       let array = [];
       chItems.forEach(async (item) => {
         const its = item.querySelectorAll(`a[href*="${urlGruop}"]`);
-        if (its.length > 0)
+        const avatart = its[0]
+          .querySelector("image")
+          .getAttribute("xlink:href")
+          .trim();
+        if (its.length > 0) {
           array.push({
-            avatar: its[0]
-              .querySelector("image")
-              .getAttribute("xlink:href")
-              .trim(),
+            avatar: await lib.downloadFile(avatart),
             groupId: its[0]
               .getAttribute("href")
               .replace(urlGruop, "")
@@ -376,6 +386,7 @@ class CrawData {
             active: 1,
             createdAt: new Date(),
           });
+        }
       });
       return array;
     }, social);
@@ -509,23 +520,29 @@ class CrawData {
     const page = this._page;
     await page.goto(`https://www.facebook.com/${social.uid}`);
     await delay(3000);
-    console.log('bat dau : click ban dang nghi gi')
-    // await page.evaluate(()=>{
-    //   document.querySelector('[data-pagelet="ProfileComposer"] [role="button"] div span').click()
-    // })// bạn đang nghĩ gì
-   // await page.getByText("Bạn đang nghĩ gì?").click();
-   await page.locator('[data-pagelet="ProfileComposer"] [role="button"] div span').click()
+    console.log("bat dau : click ban dang nghi gi");
+    await page.evaluate(() => {
+      document
+        .querySelector(
+          '[data-pagelet="ProfileComposer"] [role="button"] div span'
+        )
+        .click();
+    }); // bạn đang nghĩ gì
+    // await page.getByText("Bạn đang nghĩ gì?").click();
+    // await page
+    //   .locator('[data-pagelet="ProfileComposer"] [role="button"] div span')
+    //   .click();
     const folderMedia = article?.media;
     if (folderMedia) {
       const files = getFiles(folderMedia);
       const filesUpload = await this.randomUploads(files);
-     console.log('upload file')
+      console.log("upload file");
       const tect = "Thêm ảnh/video";
       try {
-      //  await page.getByText(tect).click();
+        //  await page.getByText(tect).click();
         await delay(2000);
-        await this.uploadFiles('[aria-label="Ảnh/video"]', filesUpload,page);
-        console.log('xong')
+        await this.uploadFiles('[aria-label="Ảnh/video"]', filesUpload, page);
+        console.log("xong");
       } catch (error) {}
       await page.getByText("Tiếp").click();
       await delay(2000);

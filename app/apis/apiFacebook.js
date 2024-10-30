@@ -13,8 +13,8 @@ const runWork = async (app, url) => {
             if (values.length > 0) {
               for (let index = 0; index < values.length; index++) {
                 const element = values[index];
-                await craw.loginDesktop(element);
-                await craw.close();
+                await craw.loginDesktop(element,true);
+              //  await craw.close();
               }
             }
           }
